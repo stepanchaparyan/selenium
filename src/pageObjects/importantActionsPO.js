@@ -89,8 +89,6 @@ export default class FlowBot {
 		await this.driver.wait(until.elementLocated(By.css(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON)), 10000, 'Could not locate the child element within the time specified');
 		await this.driver.findElement(By.css(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON)).click();
 
-		console.log('22222');
-
 		// //? new question for boy
 		// await this.page.waitFor(500);
 		// await this.page.click(BOT_SECTION.SELECTORS.QUESTION_ON_ANSWER_BOY);
@@ -143,7 +141,7 @@ export default class FlowBot {
 		// });
 
 		const data = await this.driver.takeScreenshot();
-		await fs.writeFileSync('out2.png', data, 'base64');
+		await fs.writeFileSync('./src/helpers/screenshots/test.png', data, 'base64');
 
 		// //* URL
 		// await this.page.waitFor(500);
