@@ -1,9 +1,7 @@
 import { NAVBAR } from '../helpers/constants/navbarConstants.js';
 import { BOT_SECTION } from '../helpers/constants/botsSectionConstants.js';
 import Utils from '../helpers/utils';
-import { By, Key, until } from 'selenium-webdriver';
-import fs from 'fs';
-
+import { By, until } from 'selenium-webdriver';
 
 export default class FlowBot {
 	constructor (driver) {
@@ -139,9 +137,6 @@ export default class FlowBot {
 		// await this.driver.takeScreenshot().then(function (data) {
 		// 	fs.writeFileSync('out1.png', data, 'base64');
 		// });
-
-		const data = await this.driver.takeScreenshot();
-		await fs.writeFileSync('./src/helpers/screenshots/test.png', data, 'base64');
 
 		// //* URL
 		// await this.page.waitFor(500);
