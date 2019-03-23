@@ -1,6 +1,6 @@
 import CREDS from '../../settings/creds';
-import { LOGIN_PAGE } from '../helpers/constants/loginPageConstants.js';
-import { Builder, By, Key, until } from 'selenium-webdriver';
+import { LOGIN_PAGE } from '../login/loginPageConstants';
+import { By, until } from 'selenium-webdriver';
 
 // import faker from 'faker';
 // let randomEmail = faker.internet.email();

@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { Builder } from 'selenium-webdriver';
-import LoginPage from '../src/pageObjects/loginPagePO';
+import LoginPage from '../src/login/loginPage';
 import chromeOptions from '../settings/chromeOptions';
 
 describe('Smoke Test', () => {

@@ -3,7 +3,7 @@ import { IFRAME } from '../botSection/iframeConstants';
 import { SIDEMENU } from '../sideMenu/sideMenuConstants';
 import { BOT_SECTION } from '../botSection/botsSectionConstants';
 import Utils from '../helpers/utils';
-import { Builder, By, Key, until } from 'selenium-webdriver';
+import { By, until } from 'selenium-webdriver';
 
 export default class Dashboard {
 

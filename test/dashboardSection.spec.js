@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { Builder } from 'selenium-webdriver';
 import DashboardPage from '../src/dashboardSection/dashboardPage';
-import LoginPage from '../src/pageObjects/loginPagePO';
+import LoginPage from '../src/login/loginPage';
 import chromeOptions from '../settings/chromeOptions';
 
 describe('DefaultTest', () => {

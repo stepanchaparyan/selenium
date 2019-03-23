@@ -1,5 +1,5 @@
-import { NAVBAR } from '../helpers/constants/navbarConstants.js';
-import { BOT_SECTION } from '../helpers/constants/botsSectionConstants.js';
+import { SIDEMENU } from '../sideMenu/sideMenuConstants';
+import { BOT_SECTION } from '../botSection/botsSectionConstants';
 import Utils from '../helpers/utils';
 import { By, until } from 'selenium-webdriver';
 
@@ -10,8 +10,8 @@ export default class FlowBot {
 	}
 
 	async createBotByImportantActionDoc () {
-		await this.driver.wait(until.elementLocated(By.css(NAVBAR.SELECTORS.BOTS)), 10000, 'Could not locate the child element within the time specified');
-		await this.driver.findElement(By.css(NAVBAR.SELECTORS.BOTS)).click();
+		await this.driver.wait(until.elementLocated(By.css(SIDEMENU.SELECTORS.BOTS)), 10000, 'Could not locate the child element within the time specified');
+		await this.driver.findElement(By.css(SIDEMENU.SELECTORS.BOTS)).click();
 		await this.utils.clickOnCreateBotButton();
 		await this.driver.wait(until.elementLocated(By.css(BOT_SECTION.SELECTORS.CREATE_FLOW_BOT)), 10000, 'Could not locate the child element within the time specified');
 		await this.driver.findElement(By.css(BOT_SECTION.SELECTORS.CREATE_FLOW_BOT)).click();

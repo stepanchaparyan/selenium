@@ -6,12 +6,7 @@
     "test": "mocha --opts ./settings/mocha.opts",
     "eslint": "./node_modules/.bin/eslint src/ test/"
   },
-  "keywords": [
-    "testing",
-    "mocha",
-    "chai",
-    "selenium"
-  ],
+  "keywords": [ "testing", "mocha", "chai", "selenium" ],
   "dependencies": {
     "chai": "^4.1.2",
     "chromedriver": "^2.46.0",
