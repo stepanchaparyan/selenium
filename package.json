@@ -1,20 +1,21 @@
 {
   "name": "automation-testing",
   "version": "0.0.1",
-  "description": "automation testing with puppeteer-mocha-chai",
+  "description": "automation testing with selenium-mocha-chai",
   "scripts": {
-    "test": "mocha --reporter mochawesome --require babel-core/register test/main.spec.js --timeout 15000000",
+    "test": "mocha --opts ./settings/mocha.opts",
     "eslint": "./node_modules/.bin/eslint src/ test/"
   },
   "keywords": [
     "testing",
     "mocha",
     "chai",
-    "puppeteer"
+    "selenium"
   ],
   "dependencies": {
     "chai": "^4.1.2",
     "chromedriver": "^2.46.0",
+    "faker": "^4.1.0",
     "geckodriver": "^1.16.0",
     "mocha": "^4.1.0",
     "mochawesome": "^3.1.1",

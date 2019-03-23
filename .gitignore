@@ -1,6 +1,7 @@
 /node_modules
 /src/helpers/screenshots
 creds.js
+/settings/creds
 package-lock.json
 .git
 .*.swp
