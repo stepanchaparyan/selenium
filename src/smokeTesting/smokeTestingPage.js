@@ -9,53 +9,48 @@ export default class FlowBot {
 		this.utils = new Utils(driver);
 	}
 
-	async createBotByImportantActionDoc () {
-		await this.driver.wait(until.elementLocated(By.css(SIDEMENU.SELECTORS.BOTS)), 10000, 'Could not locate the child element within the time specified');
-		await this.driver.findElement(By.css(SIDEMENU.SELECTORS.BOTS)).click();
+	async createFlowBot() {
+		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
 		await this.utils.clickOnCreateBotButton();
-		await this.driver.wait(until.elementLocated(By.css(BOT_SECTION.SELECTORS.CREATE_FLOW_BOT)), 10000, 'Could not locate the child element within the time specified');
-		await this.driver.findElement(By.css(BOT_SECTION.SELECTORS.CREATE_FLOW_BOT)).click();
-		await this.driver.sleep(500);
-		await this.driver.wait(until.elementLocated(By.css(BOT_SECTION.SELECTORS.CREATE_BOT_CONTINUE)), 10000, 'Could not locate the child element within the time specified');
-		await this.driver.findElement(By.css(BOT_SECTION.SELECTORS.CREATE_BOT_CONTINUE)).click();
-		await this.driver.wait(until.elementLocated(By.css(BOT_SECTION.SELECTORS.CREATE_WEB_CHAT_BOT)), 10000, 'Could not locate the child element within the time specified');
-		await this.driver.findElement(By.css(BOT_SECTION.SELECTORS.CREATE_WEB_CHAT_BOT)).click();
-		await this.driver.wait(until.elementLocated(By.css(BOT_SECTION.SELECTORS.BOT_NAME_INPUT)), 10000, 'Could not locate the child element within the time specified');
-		await this.driver.findElement(By.css(BOT_SECTION.SELECTORS.BOT_NAME_INPUT)).sendKeys('test');
-		await this.driver.wait(until.elementLocated(By.css(BOT_SECTION.SELECTORS.CREATE_BOT_BUTTON_AFTER_TYPE_NAME)), 10000, 'Could not locate the child element within the time specified');
-		await this.driver.findElement(By.css(BOT_SECTION.SELECTORS.CREATE_BOT_BUTTON_AFTER_TYPE_NAME)).click();
+		await this.utils.click(BOT_SECTION.SELECTORS.CREATE_FLOW_BOT);
+		await this.utils.click(BOT_SECTION.SELECTORS.CREATE_BOT_CONTINUE);
+		await this.utils.click(BOT_SECTION.SELECTORS.CREATE_WEB_CHAT_BOT);
+		await this.utils.sendKeys(BOT_SECTION.SELECTORS.BOT_NAME_INPUT, 'selSmoke');
+		await this.utils.click(BOT_SECTION.SELECTORS.CREATE_BOT_BUTTON_AFTER_TYPE_NAME);
+		return await true;
+	}
 
-		// //* Free text
+	async createFreeTextQuestion () {
 		await this.driver.sleep(1000);
-		await this.driver.wait(until.elementLocated(By.css(BOT_SECTION.SELECTORS.EDIT_FIRST_QUESTION)), 10000, 'Could not locate the child element within the time specified');
-		await this.driver.findElement(By.css(BOT_SECTION.SELECTORS.EDIT_FIRST_QUESTION)).click();
-		await this.driver.wait(until.elementLocated(By.css(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT)), 10000, 'Could not locate the child element within the time specified');
-		await this.driver.findElement(By.css(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT)).clear();
-		await this.driver.findElement(By.css(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT)).sendKeys('What is your name?');
-		await this.driver.sleep(500);
-		await this.driver.wait(until.elementLocated(By.css(BOT_SECTION.SELECTORS.ADD_ON)), 10000, 'Could not locate the child element within the time specified');
-		await this.driver.findElement(By.css(BOT_SECTION.SELECTORS.ADD_ON)).click();
-		await this.driver.wait(until.elementLocated(By.css(BOT_SECTION.SELECTORS.CHOOSE_QUESTION_TYPE)), 10000, 'Could not locate the child element within the time specified');
-		await this.driver.findElement(By.css(BOT_SECTION.SELECTORS.CHOOSE_QUESTION_TYPE)).sendKeys('Freetext Feedback');
-		await this.driver.wait(until.elementLocated(By.css(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON)), 10000, 'Could not locate the child element within the time specified');
-		await this.driver.findElement(By.css(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON)).click();
+		await this.utils.click(BOT_SECTION.SELECTORS.EDIT_FIRST_QUESTION);
+		await this.utils.clear(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT);
+		await this.utils.sendKeys(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'What is your name?');
+		await this.utils.click(BOT_SECTION.SELECTORS.ADD_ON);
+		await this.utils.sendKeys(BOT_SECTION.SELECTORS.CHOOSE_QUESTION_TYPE, 'Freetext Feedback');
+		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
+		return await true;
+	}
 
-		// //* Options
-		// await this.page.waitFor(500);
-		// await this.page.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
-		// await this.page.waitFor(500);
-		// await this.page.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'Would you like to continue?');
-		// await this.page.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
-		// await this.page.waitFor(500);
-		// await this.page.click(BOT_SECTION.SELECTORS.CREATE_ANSWER_Q4);
-		// await this.page.waitFor(500);
-		// await this.page.type(BOT_SECTION.SELECTORS.ADD_NEW_ANSWER_INPUT, 'Yes');
-		// await this.page.click(BOT_SECTION.SELECTORS.SAVE_NEW_ANSWER);
-		// await this.page.waitFor(500);
-		// await this.page.click(BOT_SECTION.SELECTORS.CREATE_ANSWER_Q4);
-		// await this.page.waitFor(500);
-		// await this.page.type(BOT_SECTION.SELECTORS.ADD_NEW_ANSWER_INPUT, 'No');
-		// await this.page.click(BOT_SECTION.SELECTORS.SAVE_NEW_ANSWER);
+	async createOptionsQuestion() {
+		await this.driver.sleep(500);
+		await this.utils.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
+		await this.driver.sleep(500);
+		await this.utils.sendKeys(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'Would you like to continue?');
+		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
+		await this.driver.sleep(500);
+		await this.utils.click(BOT_SECTION.SELECTORS.CREATE_ANSWER_Q4);
+		await this.driver.sleep(500);
+		await this.utils.sendKeys(BOT_SECTION.SELECTORS.ADD_NEW_ANSWER_INPUT, 'Yes');
+		await this.utils.click(BOT_SECTION.SELECTORS.SAVE_NEW_ANSWER);
+		await this.driver.sleep(500);
+		await this.utils.click(BOT_SECTION.SELECTORS.CREATE_ANSWER_Q4);
+		await this.driver.sleep(500);
+		await this.utils.sendKeys(BOT_SECTION.SELECTORS.ADD_NEW_ANSWER_INPUT, 'No');
+		await this.utils.click(BOT_SECTION.SELECTORS.SAVE_NEW_ANSWER);
+		return await true;
+	}
+
+	async createBotByImportantActionDoc () {
 
 		//* Multiple options
 		await this.driver.sleep(500);
