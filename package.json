@@ -6,13 +6,19 @@
     "test": "mocha --opts ./settings/mocha.opts",
     "eslint": "./node_modules/.bin/eslint src/ test/"
   },
-  "keywords": [ "testing", "mocha", "chai", "selenium" ],
+  "keywords": [
+    "testing",
+    "mocha",
+    "chai",
+    "selenium"
+  ],
   "dependencies": {
     "chai": "^4.1.2",
     "chromedriver": "^2.46.0",
     "faker": "^4.1.0",
     "geckodriver": "^1.16.0",
     "mocha": "^4.1.0",
+    "mocha-testrail-reporter": "^1.0.12",
     "mochawesome": "^3.1.1",
     "selenium-webdriver": "^4.0.0-alpha.1"
   },

@@ -5,7 +5,7 @@ module.exports = {
 			RUN: '#collapseNavbarId > ul.nav.navbar-nav.cfg-navbar-center.ng-star-inserted > li:nth-child(3) > a',
 			TRAIN: 'body > app-root > div > iox-page-container > div > iox-check > iox-toolbar-menu > div > div > ul > li.toolbar-menu-item.toolbar-menu-item-enabled.button-style-item.ng-star-inserted > a',
 			INTEGRATE: '#collapseNavbarId > ul.nav.navbar-nav.cfg-navbar-center.ng-star-inserted > li:nth-child(2) > a',
-			CHECHBOX_GOOGLE_HOME: '#ghome',
+			CHECHBOX_GOOGLE_HOME: 'body > app-root > div > iox-page-container > div > iox-integrate > div > div > iox-cb-kind-item:nth-child(6) > div > div.switch.ng-star-inserted > label',
 			GOOGLE_HOME_INPUT_1: 'body > modal-container > div > div > div.modal-body.modal-body-magento > div:nth-child(5) > input',
 			GOOGLE_HOME_INPUT_2: 'body > modal-container > div > div > div.modal-body.modal-body-magento > div:nth-child(7) > input',
 			INTEGRATE_BUTTON: 'body > modal-container > div > div > div.modal-body.modal-body-magento > button',
