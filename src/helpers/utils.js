@@ -66,7 +66,7 @@ export default class Utils {
 
 	async reload() {
 		await this.driver.navigate().refresh();
-		await this.driver.sleep(500);
+		await this.driver.sleep(1000);
 	}
 
 	async getText(selector) {

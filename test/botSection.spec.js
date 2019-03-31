@@ -23,6 +23,10 @@ describe('Bot section', () => {
 		await driver.quit();
 	});
 
+	beforeEach(async () => {
+		await utils.reload();		
+	});
+
 	context('Open Dashboard page', () => {
 		it('C284 - Check the Dashboard page opens after Login', async () => {
 			expect(await botSection.getDefaultSectionTitle()).to.equal('Dashboard');
@@ -134,8 +138,7 @@ describe('Bot section', () => {
 			await botSection.deleteBot('C6167');
 			expect(await botSection.waitAndGetTextFromNotification()).to.include('Successfully removed bot');
 		});
-		it('C25 6168 - Check that we get toaster about deleting trained Flow bot', async () => {
-			await utils.reload(); //!
+		it.skip('C25 6168 - Check that we get toaster about deleting trained Flow bot', async () => {
 			// create bot and check that bot is created
 			await botSection.createFlowBot('C6168');
 			expect(await botSection.botIsExist('C6168')).to.equal(true, 'C6168 Bot is not exist, create process failed');
@@ -148,7 +151,6 @@ describe('Bot section', () => {
 			expect(await botSection.waitAndGetTextFromNotification()).to.include('Successfully removed bot');
 		});
 		it('C26 6169 - Check that we get toaster about deleting not trained NLP bot', async () => {
-			await utils.reload(); //!
 			// create bot and check that bot is created
 			await botSection.createNLPBot('C6169');
 			expect(await botSection.botIsExist('C6169')).to.equal(true, 'C6169 Bot is not exist, create process failed');
@@ -158,7 +160,6 @@ describe('Bot section', () => {
 			expect(await botSection.waitAndGetTextFromNotification()).to.include('Successfully removed bot');
 		});
 		it('C27 6170 - Check that we get toaster about deleting trained NLP bot', async () => {
-			await utils.reload(); //!
 			// create bot and check that bot is created
 			await botSection.createNLPBot('C6170');
 			expect(await botSection.botIsExist('C6170')).to.equal(true, 'C6170 Bot is not exist, create process failed');
@@ -174,42 +175,42 @@ describe('Bot section', () => {
 		});
 	});
 
-	context('Get text from alert and check', () => {
-		it('C6171 - Check that we get correct text from alert when delete not trained Flow bot', async () => {
+	context.only('Get text from alert and check', () => {
+		it('C28 6171 - Check that we get correct text from alert when delete not trained Flow bot', async () => {
 			// create bot and check that bot is created
-			await utils.createFlowBot('C6171');
-			expect(await utils.botIsExist('C6171')).to.equal(true, 'C6171 Bot is not exist, create process failed');
+			await botSection.createFlowBot('C6171');
+			expect(await botSection.botIsExist('C6171')).to.equal(true, 'C6171 Bot is not exist, create process failed');
 			// delete bot and get text from alert
-			expect(await utils.deleteNotTrainedBotAndGetTextFromAlert('C6171')).to.equal('Are you sure that you want to delete this bot?');
+			expect(await botSection.deleteNotTrainedBotAndGetTextFromAlert('C6171')).to.equal('Are you sure that you want to delete this bot?');
 		});
-		it('C6172 - Check that we get correct text from alert when delete trained Flow bot', async () => {
+		it('C29 6172 - Check that we get correct text from alert when delete trained Flow bot', async () => {
 			// create bot and check that bot is created
-			await utils.createFlowBot('C6172');
-			expect(await utils.botIsExist('C6172')).to.equal(true, 'C6172 Bot is not exist, create process failed');
+			await botSection.createFlowBot('C6172');
+			expect(await botSection.botIsExist('C6172')).to.equal(true, 'C6172 Bot is not exist, create process failed');
 			// train bot and that bot is trained
-			await utils.trainBot();
-			expect(await utils.botIsTrained('C6172')).to.equal(true, 'C6172 Bot is not trained, train process failed, or you have other not trained bot with same name');
+			await botSection.trainBot('C6172');
+			expect(await botSection.botIsTrained('C6172')).to.equal(true, 'C6172 Bot is not trained, train process failed, or you have other not trained bot with same name');
 			// delete bot and get text from alert
-			expect(await utils.deleteTrainedBotAndGetTextFromAlert('C6172')).to.equal('This bot is deployed. If you delete it the deployed version will be deleted as well. Please type \'delete\' word if you really want to delete the bot.');
+			expect(await botSection.deleteTrainedBotAndGetTextFromAlert('C6172')).to.equal('This bot is deployed. If you delete it the deployed version will be deleted as well. Please type \'delete\' word if you really want to delete the bot.');
 		});
-		it('C6173 - Check that we get correct text from alert when delete not trained NLP bot', async () => {
+		it('C30 6173 - Check that we get correct text from alert when delete not trained NLP bot', async () => {
 			// create bot and check that bot is created
-			await utils.createNLPBot('C6173');
-			expect(await utils.botIsExist('C6173')).to.equal(true, 'C6173 Bot is not exist, create process failed');
+			await botSection.createNLPBot('C6173');
+			expect(await botSection.botIsExist('C6173')).to.equal(true, 'C6173 Bot is not exist, create process failed');
 			// delete bot and get text from alert
-			expect(await utils.deleteNotTrainedBotAndGetTextFromAlert('C6173')).to.equal('Are you sure that you want to delete this bot?');
+			expect(await botSection.deleteNotTrainedBotAndGetTextFromAlert('C6173')).to.equal('Are you sure that you want to delete this bot?');
 		});
-		it('C6174 - Check that we get correct text from alert when delete trained NLP bot', async () => {
+		it('C31 6174 - Check that we get correct text from alert when delete trained NLP bot', async () => {
 			// create bot and check that bot is created
-			await utils.createNLPBot('C6174');
-			expect(await utils.botIsExist('C6174')).to.equal(true, 'C6174 Bot is not exist, create process failed');
+			await botSection.createNLPBot('C6174');
+			expect(await botSection.botIsExist('C6174')).to.equal(true, 'C6174 Bot is not exist, create process failed');
 			// integrate bot with Google Home
-			await utils.integrateBotToGoogle();
+			await botSection.integrateBotToGoogle('C6174');
 			// train bot and check that bot is trained
-			await utils.trainBot();
-			expect(await utils.botIsTrained('C6174')).to.equal(true, 'C6174 Bot is not trained, train process failed, or you have other not trained bot with same name');
+			await botSection.trainBot('C6174');
+			expect(await botSection.botIsTrained('C6174')).to.equal(true, 'C6174 Bot is not trained, train process failed, or you have other not trained bot with same name');
 			// delete bot and get text from alert
-			expect(await utils.deleteTrainedBotAndGetTextFromAlert('C6174')).to.equal('This bot is deployed. If you delete it the deployed version will be deleted as well. Please type \'delete\' word if you really want to delete the bot.');
+			expect(await botSection.deleteTrainedBotAndGetTextFromAlert('C6174')).to.equal('This bot is deployed. If you delete it the deployed version will be deleted as well. Please type \'delete\' word if you really want to delete the bot.');
 		});
 	});
 

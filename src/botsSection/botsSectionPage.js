@@ -129,12 +129,24 @@ export default class BotSection {
 		await this.driver.sleep(500);
 	}
 	async deleteNotTrainedBotAndGetTextFromAlert(botName) {
-		await this.driver.sleep(500);
+		await this.driver.sleep(1000);//!
 		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
 		await this.clickOnBotDeleteButton(botName);
+		await this.driver.sleep(1000); //!
 		const text = await this.utils.getText(BOT_SECTION.SELECTORS.DELETE_ALERT_TEXT);
 		await this.utils.click(BOT_SECTION.SELECTORS.YES_BUTTON_ON_DELETE);
-		await this.driver.sleep(500); //?
+		await this.driver.sleep(1000); //?
+		return await text;
+	}
+	async deleteTrainedBotAndGetTextFromAlert(botName) {
+		await this.driver.sleep(2000);//!
+		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
+		await this.clickOnBotDeleteButton(botName);
+		await this.driver.sleep(1000); //!
+		const text = await this.utils.getText(BOT_SECTION.SELECTORS.DELETE_ALERT_TEXT);
+		await this.utils.sendKeys(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_INPUT, 'delete');
+		await this.utils.click(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_DELETE_BUTTON, { delay: 50 });
+		await this.driver.sleep(1000);//!
 		return await text;
 	}
 
@@ -146,26 +158,9 @@ export default class BotSection {
 		await this.utils.sendKeys(BOT_SECTION.SELECTORS.GOOGLE_HOME_INPUT_1, 'newagent-4dfa0');
 		await this.utils.sendKeys(BOT_SECTION.SELECTORS.GOOGLE_HOME_INPUT_2, '237d84ca4fc8457c8b3cf8c4c348476b');
 		await this.utils.click(BOT_SECTION.SELECTORS.INTEGRATE_BUTTON);
-		await this.driver.sleep(1000); // 2000
+		await this.driver.sleep(2000); //! 2000
 		await this.utils.goToBotsPage();
 	}
-
-
-
-	async deleteTrainedBotAndGetTextFromAlert(botName) {
-		await this.driver.sleep(2000);//!
-		await this.click(SIDEMENU.SELECTORS.BOTS);
-		await this.clickOnBotDeleteButton(botName);
-		const text = await this.page.$eval(BOT_SECTION.SELECTORS.DELETE_ALERT_TEXT, (text) => text.innerText);
-		await this.page.waitForSelector(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_INPUT);
-		await this.page.type(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_INPUT, 'delete');
-		await this.page.waitForSelector(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_DELETE_BUTTON);
-		await this.page.click(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_DELETE_BUTTON, { delay: 50 });
-		await this.page.waitFor(1000);//!
-		return await text;
-	}
-
-
 
 
 

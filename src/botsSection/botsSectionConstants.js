@@ -20,6 +20,7 @@ module.exports = {
 			DELETE_TRAINED_BOT_INPUT: 'body > modal-container > div > div > div > form > input',
 			DELETE_TRAINED_BOT_DELETE_BUTTON: 'body > modal-container > div > div > div > form > button.btn.btn-default',
 			DELETE_ALERT_FLOW_BOT: 'body > modal-container > div > div',
+			DELETE_ALERT_TEXT: 'body > modal-container > div > div > div > p',
 			YES_BUTTON_ON_DELETE: 'body > modal-container > div > div > div > form > button.btn.btn-default',
 			NO_BUTTON_ON_DELETE: 'body > modal-container > div > div > div > form > button.btn.btn-primary',
 			CANCEL_BUTTON_ON_DELETE: 'body > modal-container > div > div > div > form > button.btn.btn-primary',
