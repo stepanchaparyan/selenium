@@ -27,16 +27,16 @@ describe('Bot section', () => {
 		await utils.reload();
 	});
 
-	context('Open Dashboard page', () => {
-		it('C284 - Check the Dashboard page opens after Login', async () => {
+	context.only('Open Dashboard page', () => {
+		it('C53 284 - Check the Dashboard page opens after Login', async () => {
 			expect(await botSection.getDefaultSectionTitle()).to.equal('Dashboard');
 			expect(await botSection.getDefaultSectionURL()).to.equal('dashboard');
 			expect(await botSection.checkDashboardSectionIsActive()).to.equal(true);
 		});
 	});
 
-	context('Create Flow Bot', () => {
-		it('C282 - Check that when user creates more than 10 bots the website works as it was', async () => {
+	context.only('Create Flow Bot', () => {
+		it('C54 282 - Check that when user creates more than 10 bots the website works as it was', async () => {
 			// get Bots count before test
 			const botsCountBefore = await botSection.getBotsCountFromDashboard(DASHBOARD.SELECTORS.BOTS_COUNT_TEXT);
 			// create 10 bots
@@ -48,7 +48,7 @@ describe('Bot section', () => {
 			// check that we created just 10 new bots
 			expect(await Number(botsCountAfter)).to.equal(Number(botsCountBefore) + 10);
 		});
-		it('C69 - Check the "Create Bot" functionality', async () => {
+		it('C55 69 - Check the "Create Bot" functionality', async () => {
 			// create 3 bots
 			await botSection.createBotsWithLocationQuestion('C69', 3);
 			// get and check that we have 3 bots with name 'C69'
@@ -63,7 +63,7 @@ describe('Bot section', () => {
 	});
 
 	context.only('Delete Bots', () => {
-		it('C6163 - Check the "Delete Flow Bot" (not trained) functionality', async () => {
+		it('C48 6163 - Check the "Delete Flow Bot" (not trained) functionality', async () => {
 			// create bot and check that bot is created
 			await botSection.createFlowBot('C6163');
 			expect(await botSection.botIsExist('C6163')).to.equal(true, 'C6163 Bot is not exist, create process failed');
@@ -74,7 +74,7 @@ describe('Bot section', () => {
 			await botSection.deleteBot('C6163');
 			expect(await botSection.botIsExist('C6163')).to.equal(false, 'C6163 bot did not delete');
 		});
-		it('C6164 - Check the `Delete Flow Bot` (trained) functionality', async () => {
+		it('C49 6164 - Check the `Delete Flow Bot` (trained) functionality', async () => {
 			// create bot and check that bot is created
 			await botSection.createFlowBot('C6164');
 			expect(await botSection.botIsExist('C6164')).to.equal(true, 'C6164 Bot is not exist, create process failed');
@@ -94,7 +94,7 @@ describe('Bot section', () => {
 			await botSection.deleteTrainedBot('C6164');
 			expect(await botSection.botIsExist('C6164')).to.equal(false, 'C6164 bot did not delete');
 		});
-		it('C6165 - Check the "Delete NLP Bot" (not trained) functionality', async () => {
+		it('C50 6165 - Check the "Delete NLP Bot" (not trained) functionality', async () => {
 			// create bot and check that bot is created
 			await botSection.createNLPBot('C6165');
 			expect(await botSection.botIsExist('C6165')).to.equal(true, 'C6165 Bot is not exist, create process failed');
@@ -105,7 +105,7 @@ describe('Bot section', () => {
 			await botSection.deleteBot('C6165');
 			expect(await botSection.botIsExist('C6165')).to.equal(false, 'C6165 bot did not delete');
 		});
-		it('C6166 - Check the `Delete NLP Bot` (trained) functionality', async () => {
+		it('C51 6166 - Check the `Delete NLP Bot` (trained) functionality', async () => {
 			// create bot and check that bot is created
 			await botSection.createNLPBot('C6166');
 			expect(await botSection.botIsExist('C6166')).to.equal(true, 'C6166 Bot is not exist, create process failed');
@@ -138,7 +138,7 @@ describe('Bot section', () => {
 			await botSection.deleteBot('C6167');
 			expect(await botSection.waitAndGetTextFromNotification()).to.include('Successfully removed bot');
 		});
-		it.skip('C25 6168 - Check that we get toaster about deleting trained Flow bot', async () => {
+		it('C25 6168 - Check that we get toaster about deleting trained Flow bot', async () => {
 			// create bot and check that bot is created
 			await botSection.createFlowBot('C6168');
 			expect(await botSection.botIsExist('C6168')).to.equal(true, 'C6168 Bot is not exist, create process failed');
@@ -215,7 +215,7 @@ describe('Bot section', () => {
 	});
 
 	context.only('Update Flow Bot', () => {
-		it('C73 - Check "the Edit Bot" functionality', async () => {
+		it('C52 73 - Check "the Edit Bot" functionality', async () => {
 			// create bot and check that bot is created
 			await botSection.createFlowBot('C73');
 			expect(await botSection.botIsExist('C73')).to.equal(true, 'C73 Bot is not exist, create process failed');
