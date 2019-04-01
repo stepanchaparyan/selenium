@@ -11,42 +11,6 @@ export default class BotSection {
 		this.loginPage = new LoginPage(driver);
 	}
 
-	async createLocationQuestion() {
-		await this.utils.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
-		await this.page.waitFor(500);//
-		await this.utils.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'Where are you from?');
-		await this.utils.click(BOT_SECTION.SELECTORS.ADD_ON);
-		await this.utils.select(BOT_SECTION.SELECTORS.CHOOSE_QUESTION_TYPE, 'Location picker');
-		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
-		await this.page.waitForSelector(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON, { visible: false, delay: 200 });
-		await this.page.waitFor(500);//
-	}
-	async createBotsWithLocationQuestion(botName, count = 1) {
-		for (let i = 0; i < count; i++) {
-			await this.utils.createFlowBot(botName);
-			await this.createLocationQuestion();
-		}
-	}
-
-	async getBotsCountFromDashboard(selector) {
-		await this.goToDashboardPage();
-		await this.page.waitForSelector(selector, { visible: true });
-		let botsCountText = await this.page.$eval(selector, (text) => text.innerText);
-		const botsCountBefore = botsCountText.substr(0, 2);
-		return await botsCountBefore;
-	}
-
-	async deleteFlowBots(botName, count = 1) {
-		for (let i = 0; i < count; i++) {
-			await this.deleteBot(botName);
-			await this.utils.reload();
-		}
-	}
-	async createFlowBots(botName, count = 1) {
-		for (let i = 0; i < count; i++) {
-			await this.createFlowBot(botName);
-		}
-	}
     async createFlowBot(botName) {
 		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
         await this.clickOnCreateBotButton();
@@ -57,6 +21,11 @@ export default class BotSection {
 		await this.utils.click(BOT_SECTION.SELECTORS.CREATE_BOT_BUTTON_AFTER_TYPE_NAME);
 		await this.driver.sleep(1000); //!
 	}
+	async createFlowBots(botName, count = 1) {
+		for (let i = 0; i < count; i++) {
+			await this.createFlowBot(botName);
+		}
+	}
 	async createNLPBot(botName) {
 		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
 		await this.clickOnCreateBotButton();
@@ -66,41 +35,47 @@ export default class BotSection {
 		await this.driver.sleep(1000); //!
 	}
 
-    async clickOnCreateBotButton () {
-        await this.driver.sleep(500);
-        await this.driver.navigate().refresh();
-        const botsCount = await this.utils.getElementsLength(BOT_SECTION.SELECTORS.ALL_BOTS);
-        await this.utils.click(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botsCount}) > button`);
-        return await true;
+	async deleteBot(botName) {
+		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
+		await this.clickOnBotDeleteButton(botName);
+		await this.driver.sleep(500);//
+		await this.utils.click(BOT_SECTION.SELECTORS.YES_BUTTON_ON_DELETE);
+		await this.driver.sleep(500);
 	}
-
-	async trainBot(botName) {
-		await this.clickOnBotUpdateButton(botName);
-		await this.driver.sleep(1000); //! 
-		await this.utils.click(BOT_SECTION.SELECTORS.RUN);
-		await this.utils.click(BOT_SECTION.SELECTORS.TRAIN);
-		await this.utils.waitUntilElementIsNotVisible(BOT_SECTION.SELECTORS.PROGRESS_BAR, 'Train process does not finish');
+	async deleteFlowBots(botName, count = 1) {
+		for (let i = 0; i < count; i++) {
+			await this.deleteBot(botName);
+			await this.utils.reload();
+		}
 	}
-
 	async deleteTrainedBot(botName) {
 		await this.driver.sleep(2000);//!
 		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
 		await this.clickOnBotDeleteButton(botName);
 		await this.utils.sendKeys(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_INPUT, 'delete');
+		await this.driver.sleep(1000);//!
 		await this.utils.click(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_DELETE_BUTTON);
 		await this.driver.sleep(1000);//!
 	}
 
-	async clickOnBotDeleteButton(botName) {
-		const botNumber = await this.utils.getCorrespondingBotNumber(botName);
-		await this.driver.wait(until.elementLocated(By.css(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.bot-content > div.action-buttons.btn-group > button:nth-child(3) > i`)), 10000, 'Could not locate the child element within the time specified');
-		await this.utils.click(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.bot-content > div.action-buttons.btn-group > button:nth-child(3) > i`);
+	async trainBot(botName) {
+		await this.clickOnBotUpdateButton(botName);
+		await this.driver.sleep(1000); //!
+		await this.utils.click(BOT_SECTION.SELECTORS.RUN);
+		await this.utils.click(BOT_SECTION.SELECTORS.TRAIN);
+		await this.utils.waitUntilElementIsNotVisible(BOT_SECTION.SELECTORS.PROGRESS_BAR, 'Train process does not finish');
+	}
+	async integrateBotToGoogle(botName) {
+		await this.clickOnBotUpdateButton(botName);
+		await this.utils.click(BOT_SECTION.SELECTORS.INTEGRATE);
+		await this.utils.click(BOT_SECTION.SELECTORS.CHECHBOX_GOOGLE_HOME);
+		await this.utils.sendKeys(BOT_SECTION.SELECTORS.GOOGLE_HOME_INPUT_1, 'newagent-4dfa0');
+		await this.utils.sendKeys(BOT_SECTION.SELECTORS.GOOGLE_HOME_INPUT_2, '237d84ca4fc8457c8b3cf8c4c348476b');
+		await this.utils.click(BOT_SECTION.SELECTORS.INTEGRATE_BUTTON);
+		await this.driver.sleep(2000); //! 2000
+		await this.utils.goToBotsPage();
 	}
 
-	async clickOnBotUpdateButton(botName) {
-		const botNumber = await this.utils.getCorrespondingBotNumber(botName);
-		await this.utils.click(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.bot-content > div.action-buttons.btn-group > button:nth-child(1) > i`);
-	}
 	async botIsExist(botName) {
 		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
 		await this.utils.reload();
@@ -111,7 +86,6 @@ export default class BotSection {
 		}
 		return botIsExist;
 	}
-
 	async botIsTrained(botName) {
 		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
 		const botNumber = await this.utils.getCorrespondingBotNumber(botName);
@@ -121,13 +95,34 @@ export default class BotSection {
 		return classNameIncludescheck;
 	}
 
-	async deleteBot(botName) {
-		//await this.driver.sleep(500);
-		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
+    async clickOnCreateBotButton () {
+        await this.driver.sleep(500);
+        await this.driver.navigate().refresh();
+        const botsCount = await this.utils.getElementsLength(BOT_SECTION.SELECTORS.ALL_BOTS);
+        await this.utils.click(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botsCount}) > button`);
+        return await true;
+	}
+	async clickOnBotDeleteButton(botName) {
+		const botNumber = await this.utils.getCorrespondingBotNumber(botName);
+		await this.driver.wait(until.elementLocated(By.css(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.bot-content > div.action-buttons.btn-group > button:nth-child(3) > i`)), 10000, 'Could not locate the child element within the time specified');
+		await this.utils.click(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.bot-content > div.action-buttons.btn-group > button:nth-child(3) > i`);
+	}
+	async clickOnBotUpdateButton(botName) {
+		const botNumber = await this.utils.getCorrespondingBotNumber(botName);
+		await this.utils.click(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.bot-content > div.action-buttons.btn-group > button:nth-child(1)`);
+	}
+	async clickOnCancelButtonOnTrainedBotDeleteModal(){
+		await this.driver.sleep(1000);//! 0
+		await this.utils.click(BOT_SECTION.SELECTORS.CANCEL_BUTTON_ON_DELETE);
+		await this.driver.sleep(1000);//! 0
+	}
+	async clickOnNoButtonOnDeleteModal(botName) {
+		await this.utils.goToBotsPage();
 		await this.clickOnBotDeleteButton(botName);
-		await this.utils.click(BOT_SECTION.SELECTORS.YES_BUTTON_ON_DELETE);
+		await this.utils.click(BOT_SECTION.SELECTORS.NO_BUTTON_ON_DELETE);
 		await this.driver.sleep(500);
 	}
+
 	async deleteNotTrainedBotAndGetTextFromAlert(botName) {
 		await this.driver.sleep(1000);//!
 		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
@@ -150,19 +145,83 @@ export default class BotSection {
 		return await text;
 	}
 
-	async integrateBotToGoogle(botName) {
-		await this.clickOnBotUpdateButton(botName);
-		await this.utils.click(BOT_SECTION.SELECTORS.INTEGRATE);
-		//await this.driver.sleep(1000); //?
-		await this.utils.click(BOT_SECTION.SELECTORS.CHECHBOX_GOOGLE_HOME);
-		await this.utils.sendKeys(BOT_SECTION.SELECTORS.GOOGLE_HOME_INPUT_1, 'newagent-4dfa0');
-		await this.utils.sendKeys(BOT_SECTION.SELECTORS.GOOGLE_HOME_INPUT_2, '237d84ca4fc8457c8b3cf8c4c348476b');
-		await this.utils.click(BOT_SECTION.SELECTORS.INTEGRATE_BUTTON);
-		await this.driver.sleep(2000); //! 2000
-		await this.utils.goToBotsPage();
+	async createLocationQuestion() {
+		await this.utils.click(BOT_SECTION.SELECTORS.ADD_SUB_DIALOG);
+		await this.driver.sleep(500);//
+		await this.utils.sendKeys(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'Where are you from?');
+		await this.utils.click(BOT_SECTION.SELECTORS.ADD_ON);
+		await this.utils.sendKeys(BOT_SECTION.SELECTORS.CHOOSE_QUESTION_TYPE, 'Location picker');
+		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
+		const element = await this.driver.findElement(By.css(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON));
+		await this.driver.wait(until.elementIsNotVisible(element));
+		await this.driver.sleep(500);//
 	}
 
+	async createBotsWithLocationQuestion(botName, count = 1) {
+		for (let i = 0; i < count; i++) {
+			await this.createFlowBot(botName);
+			await this.createLocationQuestion();
+		}
+	}
 
+	async getBotCount(botName) {
+		await this.utils.reload();
+		await this.driver.findElement(By.css(SIDEMENU.SELECTORS.BOTS)).click();
+		await this.driver.sleep(1000);
+		const allBotsCount = await this.utils.getElementsLength(BOT_SECTION.SELECTORS.ALL_BOTS);
+		let botCount = 0;
+		for (let i = 1; i < allBotsCount; i++) {
+			if (await this.utils.getText(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${i}) > iox-bot-item > div > div.bot-content > div.bot-name`) === botName) {
+				botCount++;
+			}
+		}
+		return botCount;
+	}
+
+	async getBotsCountFromDashboard(selector) {
+		await this.utils.goToDashboardPage();
+        await this.driver.wait(until.elementLocated(By.css(selector)), 10000, 'Could not locate the child element within the time specified');
+		let botsCountText = await this.utils.getText(selector);
+		const botsCountBefore = botsCountText.substr(0, 2);
+		return await botsCountBefore;
+	}
+
+	async updateInitialQuestionToFreeTextQuestion(botName) {
+		await this.driver.sleep(500);
+		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
+		await this.clickOnBotUpdateButton(botName);
+		await this.utils.click(BOT_SECTION.SELECTORS.EDIT_FIRST_QUESTION);
+		await this.utils.click(BOT_SECTION.SELECTORS.REMOVE_DEFAULT_QUESTION);
+		await this.utils.sendKeys(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'What is your name?');
+		await this.driver.sleep(500);
+		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
+		await this.driver.sleep(500);
+	}
+	async getTextFromFirstQuestion(botName) {
+		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
+		await this.clickOnBotUpdateButton(botName);
+		const text = await this.utils.getText(BOT_SECTION.SELECTORS.FIRST_QUESTION);
+		await this.deleteBot(botName);
+		return await text;
+	}
+
+	async checkButtonIsDisabledOrNo(selector) {
+		const buttonIsDisabled = await this.driver.findElement(By.css(selector)) !== null;
+		return buttonIsDisabled;
+	}
+	async checkDeleteButtonIsDisableOrNo(botname) {
+		await this.utils.goToBotsPage();
+		await this.clickOnBotDeleteButton(botname);
+		const buttonIsDisabled = await this.checkButtonIsDisabledOrNo(BOT_SECTION.SELECTORS.DISABLED_DELETE_BUTTON);
+		return buttonIsDisabled;
+	}
+	async writeWrongWordInBotDeleteInput(wrongWord) {
+		await this.utils.sendKeys(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_INPUT, wrongWord);
+	}
+	async checkDeleteButtonIsDisableOrNoAfterWrongWord() {
+		const buttonIsDisabled = await this.checkButtonIsDisabledOrNo(BOT_SECTION.SELECTORS.DISABLED_DELETE_BUTTON);
+		return buttonIsDisabled;
+	}
 
 	async getDefaultSectionTitle() {
 		await this.utils.reload();
@@ -183,14 +242,6 @@ export default class BotSection {
 		const classNameIncludedActive = String(className).includes('active');
 		return classNameIncludedActive;
 	}
-
-	async clickOnNoButtonOnDeleteModal(botName) {
-		await this.page.waitFor(1000);
-		await this.goToBotsPage();
-		await this.utils.clickOnBotDeleteButton(botName);
-		await this.utils.click(BOT_SECTION.SELECTORS.NO_BUTTON_ON_DELETE);
-	}
-
 	async waitAndGetTextFromNotification() {
 		// try {
 			await this.driver.wait(until.elementLocated(By.css(BOT_SECTION.SELECTORS.DELETE_BOT_NOTIFICATION)), 10000, 'Could not locate the child element within the time specified');
@@ -205,47 +256,6 @@ export default class BotSection {
 		let text = await element.getText();
 		return text;
 	}
-
-	async writeWrongWordInBotDeleteInput(wrongWord) {
-		await this.utils.type(BOT_SECTION.SELECTORS.DELETE_TRAINED_BOT_INPUT, wrongWord);
-	}
-
-	async clickOnCancelButtonOnTrainedBotDeleteModal(){
-		await this.utils.click(BOT_SECTION.SELECTORS.CANCEL_BUTTON_ON_DELETE);
-	}
-
-	async checkButtonIsDisabledOrNo(selector) {
-		const buttonIsDisabled = (await this.page.$(selector)) !== null;
-		return buttonIsDisabled;
-	}
-
-	async checkDeleteButtonIsDisableOrNo(botname) {
-		await this.goToBotsPage();
-		await this.utils.clickOnBotDeleteButton(botname);
-		const buttonIsDisabled = await this.checkButtonIsDisabledOrNo(BOT_SECTION.SELECTORS.DISABLED_DELETE_BUTTON);
-		return buttonIsDisabled;
-	}
-
-	async updateInitialQuestionToFreeTextQuestion() {
-		await this.page.waitFor(500);
-		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
-		await this.utils.clickOnBotUpdateButton('C73');
-		await this.utils.click(BOT_SECTION.SELECTORS.EDIT_FIRST_QUESTION);
-		await this.utils.click(BOT_SECTION.SELECTORS.REMOVE_DEFAULT_QUESTION);
-		await this.utils.type(BOT_SECTION.SELECTORS.ENTER_QUESTION_INPUT, 'What is your name?');
-		await this.page.waitFor(500);
-		await this.utils.click(BOT_SECTION.SELECTORS.QUESTION_SAVE_BUTTON);
-		await this.page.waitFor(500);
-	}
-	async getTextFromFirstQuestion() {
-		await this.utils.click(SIDEMENU.SELECTORS.BOTS);
-		await this.utils.clickOnBotUpdateButton('C73');
-		await this.page.waitForSelector(BOT_SECTION.SELECTORS.FIRST_QUESTION);
-		const text = await this.page.$eval(BOT_SECTION.SELECTORS.FIRST_QUESTION, (text) => text.innerText);
-		await this.utils.deleteBot('C73');
-		return text;
-	}
-
 	async goToIntegratePage() {
 		await this.utils.click(BOT_SECTION.SELECTORS.INTEGRATE);
 	}
@@ -267,7 +277,5 @@ export default class BotSection {
 		await this.utils.click(BOT_SECTION.SELECTORS.X_BUTTON_ON_GENERATE_KEY_ALERT);
 		await this.goToBotsPage();
 	}
-
-
 
 }

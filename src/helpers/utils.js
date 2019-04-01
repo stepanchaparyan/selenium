@@ -38,11 +38,31 @@ export default class Utils {
         return await length;
 	}
 
+	async getText(selector) {
+		await this.driver.wait(until.elementLocated(By.css(selector)), 10000, 'Could not locate the child element within the time specified');
+		let element = await this.driver.findElement(By.css(selector));
+		let text = await element.getText();
+		return await text;
+	}
+
+	async getBotUrl(botName) {
+		await this.click(SIDEMENU.SELECTORS.BOTS);
+		const botNumber = await this.getCorrespondingBotNumber(botName);
+		const linkOfBot = await this.page.$(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.bot-content > div.copy-area-container > div > div > a`);
+		const botHref = await linkOfBot.getProperty('href');
+		const botUrlHome = botHref._remoteObject.value;
+		const botUrlChat = botUrlHome.replace('home', 'chat');
+		return await botUrlChat;
+	}
+
 	async goToDashboardPage() {
 		await this.click(SIDEMENU.SELECTORS.DASHBOARD);
 	}
 	async goToBotsPage() {
 		await this.click(SIDEMENU.SELECTORS.BOTS);
+	}
+	async goToApiConnectorPage() {
+		await this.click(SIDEMENU.SELECTORS.API_CONNECTOR);
 	}
 
     async getCorrespondingBotNumber(botName) {
@@ -69,13 +89,6 @@ export default class Utils {
 		await this.driver.sleep(1000);
 	}
 
-	async getText(selector) {
-		let element = await this.driver.findElement(By.css(selector));
-		let text = await element.getText();
-		return await text;
-	}
-
-
 	async acceptChatBotAgreement() {
 		const botUrl = await this.getBotUrl('clickOnGoogle');
 		await this.page.goto(botUrl);
@@ -84,16 +97,6 @@ export default class Utils {
 		await this.click(IFRAME.SELECTORS.AGREEMENT_CONFIRM_BUTTON);
 		await this.page.goBack();
 		return true;
-	}
-
-	async getBotUrl(botName) {
-		await this.click(SIDEMENU.SELECTORS.BOTS);
-		const botNumber = await this.getCorrespondingBotNumber(botName);
-		const linkOfBot = await this.page.$(`body > app-root > div > iox-page-container > div > iox-bots > div > div:nth-child(${botNumber}) > iox-bot-item > div > div.bot-content > div.copy-area-container > div > div > a`);
-		const botHref = await linkOfBot.getProperty('href');
-		const botUrlHome = botHref._remoteObject.value;
-		const botUrlChat = botUrlHome.replace('home', 'chat');
-		return botUrlChat;
 	}
 
 	async waitUntilElementIsNotVisible(selector, errorText='') {
