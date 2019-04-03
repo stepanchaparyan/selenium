@@ -13,13 +13,15 @@
     "selenium"
   ],
   "dependencies": {
+    "base-64": "^0.1.0",
     "chai": "^4.1.2",
     "chromedriver": "^2.46.0",
     "faker": "^4.1.0",
     "geckodriver": "^1.16.0",
     "mocha": "^4.1.0",
-    "mocha-testrail-reporter": "^1.0.12",
     "mochawesome": "^3.1.1",
+    "node-fetch": "^2.3.0",
+    "path": "^0.12.7",
     "selenium-webdriver": "^4.0.0-alpha.1"
   },
   "devDependencies": {

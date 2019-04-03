@@ -2,13 +2,14 @@ import { expect } from 'chai';
 import BotSection from '../src/botsSection/botsSectionPage';
 import { DASHBOARD } from '../src/dashboardSection/dashboardConstants';
 import Utils from '../src/helpers/utils';
-import { SIDEMENU } from '../src/sideMenuSection/sideMenuConstants';
 import { Builder } from 'selenium-webdriver';
 import LoginPage from '../src/loginSection/loginSectionPage';
 import chromeOptions from '../settings/chromeOptions';
+import TestRailAPI from '../src/helpers/TestRailAPI';
+
 
 let driver, loginPage, botSection, utils;
-
+let testRailApi;
 describe('Bot section', () => {
 	before(async () => {
 		driver = new Builder().forBrowser('chrome')
@@ -16,26 +17,49 @@ describe('Bot section', () => {
 		loginPage = new LoginPage(driver);
 		await loginPage.open();
 		await loginPage.logIn();
+		testRailApi = new TestRailAPI();
 		utils = new Utils(driver);
 		botSection = new BotSection(driver);
 	});
 	after(async () => {
 		await driver.quit();
 	});
+	// beforeEach(async () => {
+	// 	await utils.reload();
+	// });
+	context.only('Test Rail APi testing', () => {
+		it('Simple tests', async () => {
+			//console.log('post: ', await testRailApi.addRun(1, 'NewNew'));
+			//console.log('get: ', await testRailApi.getCase(3));
+			//console.log('get: ', await testRailApi.getCases());
+			//console.log('get: ', await testRailApi.getTests(386));
+			//console.log('get: ', await testRailApi.getResults(7868));
+			//console.log('get: ', await testRailApi.getTestStatus(7868));
+			//console.log('get: ', await testRailApi.getResultsForRun(386));
+			//console.log('get: ', await testRailApi.addRun(3,'Aregak32',6));
+			//console.log('get: ', await testRailApi.addResult(7872, 4));
+			//console.log('get: ', await testRailApi.addResultForCase(387,33,1,'ForCase'));
+			//console.log('get: ', await testRailApi.addResults(387,5,'ForCase'));
+			//console.log('get: ', await testRailApi.getUsers());
 
-	beforeEach(async () => {
-		await utils.reload();
+		});
 	});
-
-	context.only('Open Dashboard page', () => {
-		it('C53 284 - Check the Dashboard page opens after Login', async () => {
+	context('Open Dashboard page', () => {
+		it.only('C53 284 - Check the Dashboard page opens after Login', async () => {
 			expect(await botSection.getDefaultSectionTitle()).to.equal('Dashboard');
 			expect(await botSection.getDefaultSectionURL()).to.equal('dashboard');
-			expect(await botSection.checkDashboardSectionIsActive()).to.equal(true);
+			const finalTest = expect(await botSection.checkDashboardSectionIsActive()).to.equal(true);
+			if (finalTest) {
+				console.log('hocfbdfbfp');
+				await testRailApi.addResultForCase(389,32,1,'Update 32');
+			//} else {
+			//	console.log('hop');
+			//	await testRailApi.addResultForCase(389,32,5,'Update 32');
+			};
 		});
 	});
 
-	context.only('Create Flow Bot', () => {
+	context('Create Flow Bot', () => {
 		it('C54 282 - Check that when user creates more than 10 bots the website works as it was', async () => {
 			// get Bots count before test
 			const botsCountBefore = await botSection.getBotsCountFromDashboard(DASHBOARD.SELECTORS.BOTS_COUNT_TEXT);
@@ -62,7 +86,7 @@ describe('Bot section', () => {
 		});
 	});
 
-	context.only('Delete Bots', () => {
+	context('Delete Bots', () => {
 		it('C48 6163 - Check the "Delete Flow Bot" (not trained) functionality', async () => {
 			// create bot and check that bot is created
 			await botSection.createFlowBot('C6163');
@@ -129,7 +153,7 @@ describe('Bot section', () => {
 		});
 	});
 
-	context.only('Get toaster about deleting Bots', () => {
+	context('Get toaster about deleting Bots', () => {
 		it('C24 6167 - Check that we get toaster about deleting not trained Flow bot', async () => {
 			// create bot and check that bot is created
 			await botSection.createFlowBot('C6167');
@@ -175,7 +199,7 @@ describe('Bot section', () => {
 		});
 	});
 
-	context.only('Get text from alert and check', () => {
+	context('Get text from alert and check', () => {
 		it('C28 6171 - Check that we get correct text from alert when delete not trained Flow bot', async () => {
 			// create bot and check that bot is created
 			await botSection.createFlowBot('C6171');
@@ -214,7 +238,7 @@ describe('Bot section', () => {
 		});
 	});
 
-	context.only('Update Flow Bot', () => {
+	context('Update Flow Bot', () => {
 		it('C52 73 - Check "the Edit Bot" functionality', async () => {
 			// create bot and check that bot is created
 			await botSection.createFlowBot('C73');
@@ -226,7 +250,7 @@ describe('Bot section', () => {
 		});
 	});
 
-	context.skip('Delete integrated bot (Magento, Wordpress)', () => {
+	context('Delete integrated bot (Magento, Wordpress)', () => {
 		it('C344 - Check the "Delete Bot" with Integration functionality', async () => {
 			// get code from puppeteer_ts
 		});
