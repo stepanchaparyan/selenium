@@ -5,8 +5,8 @@ import Utils from '../src/helpers/utils';
 import { Builder } from 'selenium-webdriver';
 import LoginPage from '../src/loginSection/loginSectionPage';
 import chromeOptions from '../settings/chromeOptions';
-import TestRailAPI from '../src/helpers/TestRailAPI';
-
+//import TestRailAPI from '../src/helpers/TestRailAPI';
+import TestRailAPI from '@stepanchaparyan/testrailapi';
 
 let driver, loginPage, botSection, utils;
 let testRailApi;
@@ -15,9 +15,9 @@ describe('Bot section', () => {
 		driver = new Builder().forBrowser('chrome')
 		.setChromeOptions(chromeOptions).build();
 		loginPage = new LoginPage(driver);
-		await loginPage.open();
-		await loginPage.logIn();
-		testRailApi = new TestRailAPI();
+		//await loginPage.open();
+		//await loginPage.logIn();
+		testRailApi = new TestRailAPI('stepan', 'schaparian@yahoo.com', 'Aram05##');
 		utils = new Utils(driver);
 		botSection = new BotSection(driver);
 	});
@@ -29,8 +29,8 @@ describe('Bot section', () => {
 	// });
 	context.only('Test Rail APi testing', () => {
 		it('Simple tests', async () => {
-			//console.log('post: ', await testRailApi.addRun(1, 'NewNew'));
-			//console.log('get: ', await testRailApi.getCase(3));
+			console.log('post: ', await testRailApi.addRun(1));
+			console.log('get: ', await testRailApi.getCase(32));
 			//console.log('get: ', await testRailApi.getCases());
 			//console.log('get: ', await testRailApi.getTests(386));
 			//console.log('get: ', await testRailApi.getResults(7868));
@@ -45,7 +45,7 @@ describe('Bot section', () => {
 		});
 	});
 	context('Open Dashboard page', () => {
-		it.only('C53 284 - Check the Dashboard page opens after Login', async () => {
+		it('C53 284 - Check the Dashboard page opens after Login', async () => {
 			expect(await botSection.getDefaultSectionTitle()).to.equal('Dashboard');
 			expect(await botSection.getDefaultSectionURL()).to.equal('dashboard');
 			const finalTest = expect(await botSection.checkDashboardSectionIsActive()).to.equal(true);
