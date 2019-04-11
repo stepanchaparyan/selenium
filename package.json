@@ -19,6 +19,7 @@
     "chromedriver": "^2.46.0",
     "faker": "^4.1.0",
     "geckodriver": "^1.16.0",
+    "minimist": "^1.2.0",
     "mocha": "^4.1.0",
     "mochawesome": "^3.1.1",
     "node-fetch": "^2.3.0",

@@ -5,21 +5,28 @@ import Utils from '../src/helpers/utils';
 import { Builder } from 'selenium-webdriver';
 import LoginPage from '../src/loginSection/loginSectionPage';
 import chromeOptions from '../settings/chromeOptions';
-//import TestRailAPI from '../src/helpers/TestRailAPI';
+import args from 'minimist';
+import * as testRailCreds from '../settings/testRailSettings';
 import TestRailAPI from '@stepanchaparyan/testrailapi';
 
 let driver, loginPage, botSection, utils;
-let testRailApi;
+let testRailApi, runID, caseID;
+const argv = args(process.argv.slice(2));
+const runWithTestRail = argv._[1] === 'TestRail' ? true : false;
+
 describe('Bot section', () => {
 	before(async () => {
 		driver = new Builder().forBrowser('chrome')
 		.setChromeOptions(chromeOptions).build();
 		loginPage = new LoginPage(driver);
-		//await loginPage.open();
-		//await loginPage.logIn();
-		testRailApi = new TestRailAPI('stepan', 'schaparian@yahoo.com', 'Aram05##');
+		await loginPage.open();
+		await loginPage.logIn();
+		testRailApi = new TestRailAPI(testRailCreds.host,testRailCreds.username, testRailCreds.password);
 		utils = new Utils(driver);
 		botSection = new BotSection(driver);
+		if (runWithTestRail) {
+			runID = await testRailApi.addRunWithType(1,3);
+		}
 	});
 	after(async () => {
 		await driver.quit();
@@ -27,35 +34,62 @@ describe('Bot section', () => {
 	// beforeEach(async () => {
 	// 	await utils.reload();
 	// });
-	context.only('Test Rail APi testing', () => {
+	afterEach(async () => {
+		if (runWithTestRail) {
+			if (await testRailApi.getResultForCase(runID,caseID) !== 1) {
+				await testRailApi.addResultForCase(runID,caseID,5);
+			}
+		}
+	});
+
+	context('Test Rail APi testing', () => {
 		it('Simple tests', async () => {
-			console.log('post: ', await testRailApi.addRun(1));
-			console.log('get: ', await testRailApi.getCase(32));
-			//console.log('get: ', await testRailApi.getCases());
-			//console.log('get: ', await testRailApi.getTests(386));
-			//console.log('get: ', await testRailApi.getResults(7868));
-			//console.log('get: ', await testRailApi.getTestStatus(7868));
-			//console.log('get: ', await testRailApi.getResultsForRun(386));
-			//console.log('get: ', await testRailApi.addRun(3,'Aregak32',6));
-			//console.log('get: ', await testRailApi.addResult(7872, 4));
-			//console.log('get: ', await testRailApi.addResultForCase(387,33,1,'ForCase'));
-			//console.log('get: ', await testRailApi.addResults(387,5,'ForCase'));
+			//console.log('post: ', await testRailApi.addRun(1));
+			console.log('post: ', await testRailApi.addRunWithType(1,3));
+			//console.log('get: ', await testRailApi.getCase(32));
+			//console.log('get: ', await testRailApi.getAllCases(1));
 			//console.log('get: ', await testRailApi.getUsers());
 
 		});
 	});
-	context('Open Dashboard page', () => {
-		it('C53 284 - Check the Dashboard page opens after Login', async () => {
+	context.only('Open Dashboard page', () => {
+		it('C32  284 - Check the Dashboard page opens after Login', async function () {
+			// get test ID
+			caseID = this.test.title.substr(1,3).trim();
+			// run tests
 			expect(await botSection.getDefaultSectionTitle()).to.equal('Dashboard');
 			expect(await botSection.getDefaultSectionURL()).to.equal('dashboard');
-			const finalTest = expect(await botSection.checkDashboardSectionIsActive()).to.equal(true);
-			if (finalTest) {
-				console.log('hocfbdfbfp');
-				await testRailApi.addResultForCase(389,32,1,'Update 32');
-			//} else {
-			//	console.log('hop');
-			//	await testRailApi.addResultForCase(389,32,5,'Update 32');
-			};
+			expect(await botSection.checkDashboardSectionIsActive()).to.equal(true);
+			// update TestRail
+			if (runWithTestRail) {
+				await testRailApi.addResultForCase(runID,caseID,1);
+			}
+		});
+	});
+	context.only('Open Dashboard page', () => {
+		it('C34 284 - Check the Dashboard page opens after Login', async function () {
+			// get test ID
+			caseID = this.test.title.substr(1,3).trim();
+			// run tests
+			expect(await botSection.getDefaultSectionTitle()).to.equal('Dashboard');
+			expect(await botSection.getDefaultSectionURL()).to.equal('dashboard');
+			expect(await botSection.checkDashboardSectionIsActive()).to.equal(true);
+			// update TestRail
+			if (runWithTestRail) {
+				await testRailApi.addResultForCase(runID,caseID,1);
+			}
+		});
+		it('C35 284 - Check the Dashboard page opens after Login', async function () {
+			// get test ID
+			caseID = this.test.title.substr(1,3).trim();
+			// run tests
+			expect(await botSection.getDefaultSectionTitle()).to.equal('kDashboard');
+			expect(await botSection.getDefaultSectionURL()).to.equal('dashboard');
+			expect(await botSection.checkDashboardSectionIsActive()).to.equal(true);
+			// update TestRail
+			if (runWithTestRail) {
+				await testRailApi.addResultForCase(runID,caseID,1);
+			}
 		});
 	});
 
