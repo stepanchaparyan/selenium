@@ -17,8 +17,8 @@ export default class LoginPage {
 
 	async logIn () {
 		await this.driver.wait(until.elementLocated(By.css(LOGIN_PAGE.SELECTORS.EMAIL)), 10000, 'Could not locate the child element within the time specified');
-		await this.driver.findElement(By.css(LOGIN_PAGE.SELECTORS.EMAIL)).sendKeys(CREDS.testingUser);
-		await this.driver.findElement(By.css(LOGIN_PAGE.SELECTORS.PASSWORD)).sendKeys(CREDS.testingPassword);
+		await this.driver.findElement(By.css(LOGIN_PAGE.SELECTORS.EMAIL)).sendKeys(CREDS.automationUser);
+		await this.driver.findElement(By.css(LOGIN_PAGE.SELECTORS.PASSWORD)).sendKeys(CREDS.automationPassword);
 		await this.driver.findElement(By.css(LOGIN_PAGE.SELECTORS.LOGIN_BUTTON)).click();
 	}
 	async logOut() {
