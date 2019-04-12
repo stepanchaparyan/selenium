@@ -7,7 +7,7 @@ import LoginPage from '../src/loginSection/loginSectionPage';
 import chromeOptions from '../settings/chromeOptions';
 import args from 'minimist';
 import * as testRailCreds from '../settings/testRailSettings';
-import TestRailAPI from '@stepanchaparyan/testrailapi';
+import TestRailAPI from 'api-testrail';
 
 let driver, loginPage, botSection, utils;
 let testRailApi, runID, caseID;
