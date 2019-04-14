@@ -12,22 +12,26 @@
     "chai",
     "selenium"
   ],
+  "author": "stepanchaparyan",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stepanchaparyan/selenium.git"
+  },
   "dependencies": {
-    "@stepanchaparyan/testrailapi": "^2.1.4",
-    "base-64": "^0.1.0",
+    "ajv": "^6.10.0",
+    "ajv-keywords": "^3.4.0",
+    "api-testrail": "^1.1.1",
     "chai": "^4.1.2",
     "chromedriver": "^2.46.0",
     "faker": "^4.1.0",
     "geckodriver": "^1.16.0",
     "minimist": "^1.2.0",
     "mocha": "^4.1.0",
-    "mochawesome": "^3.1.1",
     "node-fetch": "^2.3.0",
-    "path": "^0.12.7",
     "selenium-webdriver": "^4.0.0-alpha.1"
   },
   "devDependencies": {
-    "babel": "^6.3.13",
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.2",
     "babel-preset-env": "1.7.0",

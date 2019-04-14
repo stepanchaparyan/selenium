@@ -7,7 +7,7 @@ import LoginPage from '../src/loginSection/loginSectionPage';
 import chromeOptions from '../settings/chromeOptions';
 import args from 'minimist';
 import * as testRailCreds from '../settings/testRailSettings';
-import TestRailAPI from '@stepanchaparyan/testrailapi';
+import TestRailAPI from 'api-testrail';
 
 let driver, loginPage, botSection, utils;
 let testRailApi, runID, caseID;
@@ -24,9 +24,7 @@ describe('Bot section', () => {
 		testRailApi = new TestRailAPI(testRailCreds.host,testRailCreds.username, testRailCreds.password);
 		utils = new Utils(driver);
 		botSection = new BotSection(driver);
-		if (runWithTestRail) {
-			runID = await testRailApi.addRunWithType(1,3);
-		}
+		runID = await utils.addRunWithType(testRailApi,1,3);
 	});
 	after(async () => {
 		await driver.quit();
@@ -60,10 +58,8 @@ describe('Bot section', () => {
 			expect(await botSection.getDefaultSectionTitle()).to.equal('Dashboard');
 			expect(await botSection.getDefaultSectionURL()).to.equal('dashboard');
 			expect(await botSection.checkDashboardSectionIsActive()).to.equal(true);
-			// update TestRail
-			if (runWithTestRail) {
-				await testRailApi.addResultForCase(runID,caseID,1);
-			}
+			// update TestRail if corresponding argument(TestRail) is provided
+			await utils.addResultForCase(testRailApi, runID, caseID);
 		});
 	});
 	context.only('Open Dashboard page', () => {
@@ -74,10 +70,8 @@ describe('Bot section', () => {
 			expect(await botSection.getDefaultSectionTitle()).to.equal('Dashboard');
 			expect(await botSection.getDefaultSectionURL()).to.equal('dashboard');
 			expect(await botSection.checkDashboardSectionIsActive()).to.equal(true);
-			// update TestRail
-			if (runWithTestRail) {
-				await testRailApi.addResultForCase(runID,caseID,1);
-			}
+			// update TestRail if corresponding argument(TestRail) is provided
+			await utils.addResultForCase(testRailApi, runID, caseID);
 		});
 		it('C35 284 - Check the Dashboard page opens after Login', async function () {
 			// get test ID
@@ -86,10 +80,8 @@ describe('Bot section', () => {
 			expect(await botSection.getDefaultSectionTitle()).to.equal('kDashboard');
 			expect(await botSection.getDefaultSectionURL()).to.equal('dashboard');
 			expect(await botSection.checkDashboardSectionIsActive()).to.equal(true);
-			// update TestRail
-			if (runWithTestRail) {
-				await testRailApi.addResultForCase(runID,caseID,1);
-			}
+			// update TestRail if corresponding argument(TestRail) is provided
+			await utils.addResultForCase(testRailApi, runID, caseID);
 		});
 	});
 

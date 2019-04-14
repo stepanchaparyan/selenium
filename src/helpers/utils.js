@@ -2,6 +2,10 @@ import { BOT_SECTION } from '../botsSection/botsSectionConstants';
 import { By, until } from 'selenium-webdriver';
 import { SIDEMENU } from '../sideMenuSection/sideMenuConstants';
 import { IFRAME } from '../botsSection/iframeConstants';
+import args from 'minimist';
+
+const argv = args(process.argv.slice(2));
+const runWithTestRail = argv._[1] === 'TestRail' ? true : false;
 
 export default class Utils {
 	constructor (driver) {
@@ -102,6 +106,19 @@ export default class Utils {
 	async waitUntilElementIsNotVisible(selector, errorText='') {
 		const progressBar = await this.driver.findElement(By.css(selector));
 		await this.driver.wait(until.elementIsNotVisible(progressBar), 300000, errorText);
+	}
+
+	async addResultForCase(testRailApi, runID, caseID) {
+		if (runWithTestRail) {
+			await testRailApi.addResultForCase(runID,caseID,1);
+		}
+	}
+	async addRunWithType(testRailApi, projectID, typeID) {
+		let runID;
+		if (runWithTestRail) {
+			runID = await testRailApi.addRunWithType(projectID, typeID);
+		}
+		return runID;
 	}
 
 }

@@ -1,5 +1,5 @@
 /node_modules
-/settings/creds
+/settings/creds.js
 /settings/testRailSettings.js
 package-lock.json
 .git
