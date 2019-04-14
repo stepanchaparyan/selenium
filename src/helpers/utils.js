@@ -4,8 +4,9 @@ import { SIDEMENU } from '../sideMenuSection/sideMenuConstants';
 import { IFRAME } from '../botsSection/iframeConstants';
 import args from 'minimist';
 
-const argv = args(process.argv.slice(2));
-const runWithTestRail = argv._[1] === 'TestRail' ? true : false;
+const argumentS = args(process.argv.slice(2));
+const runWithTestRail = argumentS._[1] === 'TestRail' ? true : false;
+const argument2 = argumentS._[2];
 
 export default class Utils {
 	constructor (driver) {
@@ -113,12 +114,16 @@ export default class Utils {
 			await testRailApi.addResultForCase(runID,caseID,1);
 		}
 	}
-	async addRunWithType(testRailApi, projectID, typeID) {
+	async addRunWithType(argument2, testRailApi, projectID, typeID) {
 		let runID;
 		if (runWithTestRail) {
-			runID = await testRailApi.addRunWithType(projectID, typeID);
-		}
+			if (argument2 === undefined ) {
+				runID = await testRailApi.addRunWithType(projectID, typeID);
+			} else {
+				runID = argument2;
+			}
 		return runID;
+		}
 	}
 
 }

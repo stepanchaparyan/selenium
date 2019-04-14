@@ -11,8 +11,9 @@ import TestRailAPI from 'api-testrail';
 
 let driver, loginPage, botSection, utils;
 let testRailApi, runID, caseID;
-const argv = args(process.argv.slice(2));
-const runWithTestRail = argv._[1] === 'TestRail' ? true : false;
+const argumentS = args(process.argv.slice(2));
+const runWithTestRail = argumentS._[1] === 'TestRail' ? true : false;
+const argument2 = argumentS._[2];
 
 describe('Bot section', () => {
 	before(async () => {
@@ -24,7 +25,8 @@ describe('Bot section', () => {
 		testRailApi = new TestRailAPI(testRailCreds.host,testRailCreds.username, testRailCreds.password);
 		utils = new Utils(driver);
 		botSection = new BotSection(driver);
-		runID = await utils.addRunWithType(testRailApi,1,3);
+		// set runID to argument2 (if exist) or create new run
+		runID = await utils.addRunWithType(argument2,testRailApi,1,3);
 	});
 	after(async () => {
 		await driver.quit();
