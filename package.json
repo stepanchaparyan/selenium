@@ -19,9 +19,7 @@
     "url": "https://github.com/stepanchaparyan/selenium.git"
   },
   "dependencies": {
-    "ajv": "^6.10.0",
-    "ajv-keywords": "^3.4.0",
-    "api-testrail": "^1.1.1",
+    "api-testrail": "^1.1.2",
     "chai": "^4.1.2",
     "chromedriver": "^2.46.0",
     "faker": "^4.1.0",
