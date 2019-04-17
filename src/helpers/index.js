@@ -79,7 +79,7 @@ module.exports = class TestRailAPIs {
 		return await IDs;
 	}
 
-	// Adds a new test result or comment for a test
+	// Creates a new test case
 	async addCase (sectionID, title = 'AutoCreatedTest', templateID = 1, typeID = 7, prioretyID = 3) {
 		const method = 'add_case/';
 		const pathname = path.join(`${method}`, `${sectionID}`);
