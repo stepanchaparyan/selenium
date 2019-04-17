@@ -7,7 +7,8 @@ import LoginPage from '../src/loginSection/loginSectionPage';
 import chromeOptions from '../settings/chromeOptions';
 import args from 'minimist';
 import * as testRailCreds from '../settings/testRailSettings';
-import TestRailAPI from 'api-testrail';
+//import TestRailAPI from 'api-testrail';
+import TestRailAPI from '../src/helpers/index';
 
 let driver, loginPage, botSection, utils;
 let testRailApi, runID, caseID;
@@ -42,17 +43,17 @@ describe('Bot section', () => {
 		}
 	});
 
-	context('Test Rail APi testing', () => {
+	context.only('Test Rail APi testing', () => {
 		it('Simple tests', async () => {
 			//console.log('post: ', await testRailApi.addRun(1));
-			console.log('post: ', await testRailApi.addRunWithType(1,3));
-			//console.log('get: ', await testRailApi.getCase(32));
-			//console.log('get: ', await testRailApi.getAllCases(1));
+			//console.log(await testRailApi.getTemplates(1));
+			//console.log(await testRailApi.addCase(1));
+			console.log(await testRailApi.updateCase(107, 'New2 Name', 2,3));
 			//console.log('get: ', await testRailApi.getUsers());
 
 		});
 	});
-	context.only('Open Dashboard page', () => {
+	context.skip('Open Dashboard page', () => {
 		it('C32  284 - Check the Dashboard page opens after Login', async function () {
 			// get test ID
 			caseID = this.test.title.substr(1,3).trim();
@@ -64,7 +65,7 @@ describe('Bot section', () => {
 			await utils.addResultForCase(testRailApi, runID, caseID);
 		});
 	});
-	context.only('Open Dashboard page', () => {
+	context.skip('Open Dashboard page', () => {
 		it('C34 284 - Check the Dashboard page opens after Login', async function () {
 			// get test ID
 			caseID = this.test.title.substr(1,3).trim();
