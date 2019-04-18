@@ -26,7 +26,7 @@ describe('Bot section', () => {
 		testRailApi = new TestRailAPI(testRailCreds.host,testRailCreds.username, testRailCreds.password);
 		utils = new Utils(driver);
 		botSection = new BotSection(driver);
-		// set runID to argument2 (if exist) or create new run
+		// set runID provided argument2 (if exist) or create new run
 		runID = await utils.addRunWithType(argument2,testRailApi,1,3);
 	});
 	after(async () => {
@@ -45,11 +45,9 @@ describe('Bot section', () => {
 
 	context.only('Test Rail APi testing', () => {
 		it('Simple tests', async () => {
-			//console.log('post: ', await testRailApi.addRun(1));
 			//console.log(await testRailApi.getTemplates(1));
-			//console.log(await testRailApi.addCase(1));
-			console.log(await testRailApi.updateCase(107, 'New2 Name', 2,3));
-			//console.log('get: ', await testRailApi.getUsers());
+			//console.log(await testRailApi.deleteMilestone(6));
+			console.log(await testRailApi.addPlan(1, 'NewPlan', 'desc'));
 
 		});
 	});
