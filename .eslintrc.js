@@ -22,27 +22,11 @@ module.exports = {
     ],
     'rules': {
         "no-trailing-spaces": "error",
-        //"object-curly-spacing": "error",
         'jsx-quotes': ["error", "prefer-double"],
-        //'space-before-function-paren': ["error", "never"],
 		'no-duplicate-imports': "error",
         'require-await': "error",
         'no-dupe-keys': "error",
         'keyword-spacing': ["error", { "overrides": { "if": { "after": true }}}],
-        // 'indent': [
-        //     'warn', 4, 
-        //     {
-        //     'ArrayExpression': 1,
-        //     'CallExpression': {'arguments': 'off'},
-        //     'FunctionDeclaration': {'parameters':'first', body: 1},
-        //     'FunctionExpression': {'parameters':'first', body: 1},
-        //     'MemberExpression': 1,
-        //     'ObjectExpression': 'first',
-        //     'SwitchCase': 1,
-        //     'VariableDeclarator': 1,
-        //     'outerIIFEBody': 1
-        //     }
-        // ],
         'linebreak-style': ['error', 'unix'],
         'quotes': ['error', 'single'],
         'semi': ['error', 'always'],
@@ -82,7 +66,6 @@ module.exports = {
         -------------------------------------------------------------*/
         'prefer-template': 1,
         'arrow-spacing': ['error', { 'before': true, 'after': true }],
-        'yield-star-spacing': 1,
         'template-curly-spacing': ['error', 'never'],
         'no-duplicate-imports': ['error'],
 
@@ -100,6 +83,6 @@ module.exports = {
         
         /* Mocha
         -------------------------------------------------------------*/
-        "mocha/no-exclusive-tests": "error"
+        "mocha/no-exclusive-tests": 1
     }
 };

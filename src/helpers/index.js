@@ -4,7 +4,7 @@ const jsonpath = require('jsonpath');
 const path = require('path');
 
 module.exports = class TestRailAPIs {
-	constructor (host, username, password) {	
+	constructor (host, username, password) {
 	this.host = `https://${host}.testrail.io//index.php?/api/v2/`;
 		this.headers = {
 			Accept: 'application/json',
@@ -35,9 +35,9 @@ module.exports = class TestRailAPIs {
 	}
 
 	// Returns an existing test case
-	async getCase (caseId) {
+	async getCase (caseID) {
 		const method = 'get_case/';
-		const pathname = path.join(`${method}`, `${caseId}`);
+		const pathname = path.join(`${method}`, `${caseID}`);
 		const url = this.host + pathname;
 		const options = {
 			method: 'GET',
@@ -48,9 +48,9 @@ module.exports = class TestRailAPIs {
 		return await data;
 	}
 	// Returns a list of test cases for a project
-	async getAllCases (projectId) {
+	async getAllCases (projectID) {
 		const method = 'get_cases/';
-		const pathname = path.join(`${method}`, `${projectId}`);
+		const pathname = path.join(`${method}`, `${projectID}`);
 		const url = this.host + pathname;
 		const options = {
 			method: 'GET',
@@ -61,11 +61,11 @@ module.exports = class TestRailAPIs {
 		return await data;
 	}
 	// Returns a list of test cases IDs for a project and case type
-	async getCasesIDsByType (projectId, typeId) {
+	async getCasesIDsByType (projectID, typeID) {
 		const method = 'get_cases/';
-		const suiteId = '&suite_id=1&type_id=';
-		const pathname = path.join(`${method}`, `${projectId}`, `${suiteId}`);
-		const url = this.host + pathname + typeId;
+		const suiteID = '&suite_id=1&type_id=';
+		const pathname = path.join(`${method}`, `${projectID}`, `${suiteID}`);
+		const url = this.host + pathname + typeID;
 		const options = {
 			method: 'GET',
 			headers: this.headers
@@ -183,9 +183,9 @@ module.exports = class TestRailAPIs {
 	}
 	// Creates a new milestone
 	// The following POST fields are supported - milestone's name and description
-	async addMilestone (project_id, name = 'Milestone', description = '') {
+	async addMilestone (projectID, name = 'Milestone', description = '') {
 		const method = 'add_milestone/';
-		const pathname = path.join(`${method}`, `${project_id}`);
+		const pathname = path.join(`${method}`, `${projectID}`);
 		const url = this.host + pathname;
 		const body = {
 			'name': name,
@@ -260,9 +260,9 @@ module.exports = class TestRailAPIs {
 	}
 	// Creates a new test plan
 	// The following POST fields are supported - plan's name and description
-	async addPlan (project_id, name = 'Plan', description = '') {
+	async addPlan (projectID, name = 'Plan', description = '') {
 		const method = 'add_plan/';
-		const pathname = path.join(`${method}`, `${project_id}`);
+		const pathname = path.join(`${method}`, `${projectID}`);
 		const url = this.host + pathname;
 		const body = {
 			'name': name,
@@ -277,12 +277,292 @@ module.exports = class TestRailAPIs {
 		const data = await this.myFetch(url, options, 'Provided project ID is not valid');
 		return await data;
 	}
+	// Adds one or more new test runs to a test plan
+	// The following POST fields are supported - planID(required), suiteID(required), name
+	async addPlanEntry (planID, suiteID, runName) {
+		const method = 'add_plan_entry/';
+		const pathname = path.join(`${method}`, `${planID}`);
+		const url = this.host + pathname;
+		const body = {
+			'plan_id': planID,
+			'suite_id': suiteID,
+			'name': runName
+		};
+		const options = {
+			method: 'POST',
+			headers: this.headers,
+			body: JSON.stringify(body)
+		};
 
+		const data = await this.myFetch(url, options, 'Provided plan ID is not valid');
+		return await data;
+	}
+	// Updates an existing test plan
+	// Following fields are supported - plan's name and description
+	async updatePlan (planID, name, description) {
+		const method = 'update_plan/';
+		const pathname = path.join(`${method}`, `${planID}`);
+		const url = this.host + pathname;
+		const body = {
+			'name': name,
+			'description': description
+		};
+		const options = {
+			method: 'POST',
+			headers: this.headers,
+			body: JSON.stringify(body)
+		};
 
+		const data = await this.myFetch(url, options, 'Provided plan ID is not valid');
+		return await data;
+	}
+	// Closes an existing test plan and archives its test runs & results.
+	async closePlan (planID) {
+		const method = 'close_plan/';
+		const pathname = path.join(`${method}`, `${planID}`);
+		const url = this.host + pathname;
+		const options = {
+			method: 'POST',
+			headers: this.headers
+		};
+
+		const data = await this.myFetch(url, options, 'Provided plan ID is not valid');
+		return await data;
+	}
+	// Deletes an existing test plan.
+	async deletePlan (planID) {
+		const method = 'delete_plan/';
+		const pathname = path.join(`${method}`, `${planID}`);
+		const url = this.host + pathname;
+		const options = {
+			method: 'POST',
+			headers: this.headers
+		};
+
+		const data = await fetch(url, options);
+		await this.handleErrors(data, 'Provided plan ID is not valid');
+		return await data.status;
+	}
+
+	// Returns a list of available configurations, grouped by configuration groups
+	async getConfigs (projectID) {
+		const method = 'get_configs/';
+		const pathname = path.join(`${method}`, `${projectID}`);
+		const url = this.host + pathname;
+		const options = {
+			method: 'GET',
+			headers: this.headers
+		};
+
+		const data = await this.myFetch(url, options, 'Provided project ID is not valid');
+		return await data;
+	}
+	// Creates a new configuration group
+	async addConfigGroup (projectID, name) {
+		const method = 'add_config_group/';
+		const pathname = path.join(`${method}`, `${projectID}`);
+		const url = this.host + pathname;
+		const body = {
+			'name': name
+		};
+		const options = {
+			method: 'POST',
+			headers: this.headers,
+			body: JSON.stringify(body)
+		};
+
+		const data = await this.myFetch(url, options, 'Provided project ID is not valid');
+		return await data;
+	}
+	// Creates a new configuration
+	async addConfig (configGroupID, name) {
+		const method = 'add_config/';
+		const pathname = path.join(`${method}`, `${configGroupID}`);
+		const url = this.host + pathname;
+		const body = {
+			'name': name
+		};
+		const options = {
+			method: 'POST',
+			headers: this.headers,
+			body: JSON.stringify(body)
+		};
+
+		const data = await this.myFetch(url, options, 'Provided project ID is not valid');
+		return await data;
+	}
+	// Updates an existing configuration group
+	async updateConfigGroup (configGroupID, name) {
+		const method = 'update_config_group/';
+		const pathname = path.join(`${method}`, `${configGroupID}`);
+		const url = this.host + pathname;
+		const body = {
+			'name': name
+		};
+		const options = {
+			method: 'POST',
+			headers: this.headers,
+			body: JSON.stringify(body)
+		};
+
+		const data = await this.myFetch(url, options, 'Provided configGroup ID is not valid');
+		return await data;
+	}
+	// Updates an existing configuration
+	async updateConfig (configID, name) {
+		const method = 'update_config/';
+		const pathname = path.join(`${method}`, `${configID}`);
+		const url = this.host + pathname;
+		const body = {
+			'name': name
+		};
+		const options = {
+			method: 'POST',
+			headers: this.headers,
+			body: JSON.stringify(body)
+		};
+
+		const data = await this.myFetch(url, options, 'Provided config ID is not valid');
+		return await data;
+	}
+	// Deletes an existing configuration group and its configurations
+	async deleteConfigGroup (configGroupID) {
+		const method = 'delete_config_group/';
+		const pathname = path.join(`${method}`, `${configGroupID}`);
+		const url = this.host + pathname;
+		const options = {
+			method: 'POST',
+			headers: this.headers
+		};
+
+		const data = await fetch(url, options);
+		await this.handleErrors(data, 'Provided configGroup ID is not valid');
+		return await data.status;
+	}
+	// Deletes an existing configuration
+	async deleteConfig (configID) {
+		const method = 'delete_config_group/';
+		const pathname = path.join(`${method}`, `${configID}`);
+		const url = this.host + pathname;
+		const options = {
+			method: 'POST',
+			headers: this.headers
+		};
+
+		const data = await fetch(url, options);
+		await this.handleErrors(data, 'Provided config ID is not valid');
+		return await data.status;
+	}
+
+	// Returns a list of available priorities.
+	async getPriorities () {
+		const method = 'get_priorities/';
+		const url = this.host + method;
+		const options = {
+			method: 'GET',
+			headers: this.headers
+		};
+
+		const data = await this.myFetch(url, options, 'Bad Request');
+		return await data;
+	}
+
+	// Returns an existing project
+	async getProject (projectID) {
+		const method = 'get_project/';
+		const pathname = path.join(`${method}`, `${projectID}`);
+		const url = this.host + pathname;
+		const options = {
+			method: 'GET',
+			headers: this.headers
+		};
+
+		const data = await this.myFetch(url, options, 'Provided project ID is not valid');
+		return await data;
+	}
+	// Returns an existing projects
+	// The following filters can be applied: 1 to return completed projects only. 0 to return active projects only.
+	async getProjects (isCompleted = '') {
+		const method = 'get_projects&is_completed=';
+		const url = this.host + method + isCompleted;
+		const options = {
+			method: 'GET',
+			headers: this.headers
+		};
+
+		const data = await this.myFetch(url, options, 'Provided data is not valid');
+		return await data;
+	}
+	// Creates a new project (admin status required)
+	// The following POST fields are supported: name, announcement, showAnnouncement, suiteMode
+	async addProject (name, announcement = '', showAnnouncement = true, suiteMode = 1) {
+		const method = 'add_project/';
+		const url = this.host + method;
+		const body = {
+			'name': name,
+			'announcement': announcement,
+			'show_announcement': showAnnouncement,
+			'suite_mode': suiteMode
+		};
+		const options = {
+			method: 'POST',
+			headers: this.headers,
+			body: JSON.stringify(body)
+		};
+
+		const data = await this.myFetch(url, options, 'Provided data is not valid');
+		return await data;
+	}
+	// Updates an existing project (admin status required)
+	// Only the following updates are supported - is_completed ).
+	async updateProject (projectID, isCompleted) {
+		const method = 'update_project/';
+		const pathname = path.join(`${method}`, `${projectID}`);
+		const url = this.host + pathname;
+		const body = {
+			'is_completed': isCompleted
+		};
+		const options = {
+			method: 'POST',
+			headers: this.headers,
+			body: JSON.stringify(body)
+		};
+
+		const data = await this.myFetch(url, options, 'Provided data is not valid');
+		return await data;
+	}
+	// Deletes an existing project (admin status required)
+	async deleteProject (projectID) {
+		const method = 'delete_project/';
+		const pathname = path.join(`${method}`, `${projectID}`);
+		const url = this.host + pathname;
+		const options = {
+			method: 'POST',
+			headers: this.headers
+		};
+
+		const data = await fetch(url, options);
+		await this.handleErrors(data, 'Provided project ID is not valid');
+		return await data.status;
+	}
+
+	// Returns a list of test results for a test
+	async getResults (testID) {
+		const method = 'get_results/';
+		const pathname = path.join(`${method}`, `${testID}`);
+		const url = this.host + pathname;
+		const options = {
+			method: 'GET',
+			headers: this.headers
+		};
+
+		const data = await this.myFetch(url, options, 'Provided test ID is not valid');
+		return await data;
+	}
 	// Returns a list of test results for a test run (except untested tests)
-	async getResultsForRun (runId) {
+	async getResultsForRun (runID) {
 		const method = 'get_results_for_run/';
-		const pathname = path.join(`${method}`, `${runId}`);
+		const pathname = path.join(`${method}`, `${runID}`);
 		const url = this.host + pathname;
 		const options = {
 			method: 'GET',
@@ -292,11 +572,10 @@ module.exports = class TestRailAPIs {
 		const data = await this.myFetch(url, options, 'Provided run ID is not valid');
 		return await data;
 	}
-
 	//Returns a status of case
-	async getResultForCase (runId, caseId) {
+	async getResultForCase (runID, caseID) {
 		const method = 'get_results_for_case/';
-		const pathname = path.join(`${method}`, `${runId}/`, `${caseId}`);
+		const pathname = path.join(`${method}`, `${runID}/`, `${caseID}`);
 		const url = this.host + pathname;
 		const options = {
 			method: 'GET',
@@ -309,53 +588,93 @@ module.exports = class TestRailAPIs {
 		}
 		return await data[0].status_id;
 	}
+	// Adds a new test result or comment for a test
+	async addResult (testID, statusID, comment = '') {
+		const method = 'add_result/';
+		const pathname = path.join(`${method}`, `${testID}`);
+		const url = this.host + pathname;
+		const body = {
+			statusID: statusID,
+			comment: comment
+		};
+		const options = {
+			method: 'POST',
+			headers: this.headers,
+			body: JSON.stringify(body)
+		};
 
+		const data = await this.myFetch(url, options, 'Provided test ID or status Id is not valid');
+		return await data;
+	}
+	// Adds a new test result or comment for a case
+	async addResultForCase (runID, caseID, statusID, comment = '') {
+		const method = 'add_result_for_case/';
+		const pathname = path.join(`${method}`, `${runID}/`, `${caseID}`);
+		const url = this.host + pathname;
+		const body = {
+			status_id: statusID,
+			comment: comment
+		};
+		const options = {
+			method: 'POST',
+			headers: this.headers,
+			body: JSON.stringify(body)
+		};
+
+		const data = await this.myFetch(url, options, 'Provided run ID, case ID or status ID is not valid');
+		return await data;
+	}
+
+	// Returns a list of available test result custom fields
+	async getResultFields () {
+		const method = 'get_result_fields/';
+		const url = this.host + method;
+		const options = {
+			method: 'GET',
+			headers: this.headers
+		};
+
+		const data = await this.myFetch(url, options, 'Provided test ID is not valid');
+		return await data;
+	}
+
+	// Returns an existing test run
+	async getRun (runID) {
+		const method = 'get_run/';
+		const pathname = path.join(`${method}`, `${runID}`);
+		const url = this.host + pathname;
+		const options = {
+			method: 'GET',
+			headers: this.headers
+		};
+
+		const data = await this.myFetch(url, options, 'Provided run ID is not valid');
+		return await data;
+	}
+	// Returns a list of test runs for a project. Only returns those test runs that are not part of a test plan
+	// The following filters can be applied: 1: 1 to return completed projects only. 0 to return active projects only.
+	// The following filters also can be applied: 2: limit, 3: milestoneID, 4:suiteID
+	async getRuns (projectID,isCompleted='',limit='',milestoneID='', suiteID='') {
+		const method = 'get_runs/';
+		const filters = `&is_completed=${isCompleted}`+`&limit=${limit}`+`&milestone_id=${milestoneID}`+`&suite_id=${suiteID}`;
+		const pathname = path.join(`${method}`, `${projectID}`);
+		const url = this.host + pathname + filters;
+		const options = {
+			method: 'GET',
+			headers: this.headers
+		};
+
+		const data = await this.myFetch(url, options, 'Provided data is not valid');
+		return await data;
+	}
 	// Returns run name with time
 	async getRunName () {
 		const date = new Date();
 		let month, day, minute;
 		const getDay = date.getDate();
 		getDay < 10 ? (day = `0${getDay}`) : (day = getDay);
-		switch (new Date().getMonth()) {
-			case 0:
-				month = 'Jan';
-				break;
-			case 1:
-				month = 'Feb';
-				break;
-			case 2:
-				month = 'Mar';
-				break;
-			case 3:
-				month = 'Apr';
-				break;
-			case 4:
-				month = 'May';
-				break;
-			case 5:
-				month = 'Jun';
-				break;
-			case 6:
-				month = 'Jul';
-				break;
-			case 7:
-				month = 'Aug';
-				break;
-			case 8:
-				month = 'Sep';
-				break;
-			case 9:
-				month = 'Oct';
-				break;
-			case 10:
-				month = 'Nov';
-				break;
-			case 11:
-				month = 'Dec';
-				break;
-			default:
-				month = 'month';
-		}
+		const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+		month = months[new Date().getMonth()];
 		const year = date.getFullYear();
 		const hour = date.getHours();
 		let getMinute = date.getMinutes();
@@ -364,7 +683,6 @@ module.exports = class TestRailAPIs {
 		const runName = `Automated test run - ${fullTime}`;
 		return await runName;
 	}
-
 	// Creates a new test run and returns run ID
 	async addRun (projectId, suiteId = 1) {
 		const method = 'add_run/';
@@ -384,7 +702,6 @@ module.exports = class TestRailAPIs {
 		const data = await this.myFetch(url, options, 'Provided project ID is not valid');
 		return await data.id;
 	}
-
 	// Creates a new test run for specific case type and returns run ID
 	async addRunWithType (project_id, type_id, suite_id = 1) {
 		const method = 'add_run/';
@@ -405,15 +722,14 @@ module.exports = class TestRailAPIs {
 		const data = await this.myFetch(url, options, 'Provided project ID or type ID is not valid');
 		return await data.id;
 	}
-
-	// Adds a new test result or comment for a test
-	async addResult (testId, statusId, comment = '') {
-		const method = 'add_result/';
-		const pathname = path.join(`${method}`, `${testId}`);
+	// Updates an existing test run (partial updates are supported: runName and description)
+	async updateRun (runID, name, description ) {
+		const method = 'update_run/';
+		const pathname = path.join(`${method}`, `${runID}`);
 		const url = this.host + pathname;
 		const body = {
-			status_id: statusId,
-			comment: comment
+			name: name,
+			description: description
 		};
 		const options = {
 			method: 'POST',
@@ -421,28 +737,37 @@ module.exports = class TestRailAPIs {
 			body: JSON.stringify(body)
 		};
 
-		const data = await this.myFetch(url, options, 'Provided test ID or status Id is not valid');
-		return await data;
+		const data = await this.myFetch(url, options, 'Provided data is not valid');
+		return await data.id;
 	}
-
-	// Adds a new test result or comment for a case
-	async addResultForCase (runId, caseId, status_id, comment = '') {
-		const method = 'add_result_for_case/';
-		const pathname = path.join(`${method}`, `${runId}/`, `${caseId}`);
+	// Closes an existing test run and archives its tests & results.
+	async closeRun (runID) {
+		const method = 'close_run/';
+		const pathname = path.join(`${method}`, `${runID}`);
 		const url = this.host + pathname;
-		const body = {
-			status_id: status_id,
-			comment: comment
-		};
 		const options = {
 			method: 'POST',
-			headers: this.headers,
-			body: JSON.stringify(body)
+			headers: this.headers
 		};
 
-		const data = await this.myFetch(url, options, 'Provided run ID, case ID or status ID is not valid');
+		const data = await this.myFetch(url, options, 'Provided run ID is not valid');
 		return await data;
 	}
+	// Deletes an existing test run
+	async deleteRun (runID) {
+		const method = 'delete_run/';
+		const pathname = path.join(`${method}`, `${runID}`);
+		const url = this.host + pathname;
+		const options = {
+			method: 'POST',
+			headers: this.headers
+		};
+
+		const data = await fetch(url, options);
+		await this.handleErrors(data, 'Provided run ID is not valid');
+		return await data.status;
+	}
+
 
 	// Returns a list of available templates (requires TestRail 5.2 or later)
 	async getTemplates (projectId) {
