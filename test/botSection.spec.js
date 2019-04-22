@@ -46,7 +46,7 @@ describe('Bot section', () => {
 	context.only('Test Rail APi testing', () => {
 		it('Simple tests', async () => {
 			//console.log(await testRailApi.deleteSection(14));
-			console.log(await testRailApi.getUserByEmail('stepanchaparyan@gmail.com'));
+			console.log(await testRailApi.getTests(696,5));
 		});
 	});
 	context.skip('Open Dashboard page', () => {

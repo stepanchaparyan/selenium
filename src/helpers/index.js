@@ -971,8 +971,7 @@ module.exports = class TestRailAPIs {
 	async getTests (runID, typeID = [1,2,3,4,5]) {
 		const method = 'get_tests/';
 		const param = '&status_id=';
-		const pathname = path.join(`${method}`, `${runID}`, `${param}`);
-		const url = this.host + pathname + typeID;
+		const url = this.host + method + runID + param + typeID;
 		const options = {
 			method: 'GET',
 			headers: this.headers
