@@ -684,13 +684,13 @@ module.exports = class TestRailAPIs {
 		return await runName;
 	}
 	// Creates a new test run and returns run ID
-	async addRun (projectId, suiteId = 1) {
+	async addRun (projectID, suiteID = 1) {
 		const method = 'add_run/';
-		const pathname = path.join(`${method}`, `${projectId}`);
+		const pathname = path.join(`${method}`, `${projectID}`);
 		const url = this.host + pathname;
 		const body = {
 			name: await this.getRunName(),
-			suite_id: suiteId,
+			suite_id: suiteID,
 			include_all: true
 		};
 		const options = {
@@ -703,15 +703,15 @@ module.exports = class TestRailAPIs {
 		return await data.id;
 	}
 	// Creates a new test run for specific case type and returns run ID
-	async addRunWithType (project_id, type_id, suite_id = 1) {
+	async addRunWithType (projectID, typeID, suiteID = 1) {
 		const method = 'add_run/';
-		const pathname = path.join(`${method}`, `${project_id}`);
+		const pathname = path.join(`${method}`, `${projectID}`);
 		const url = this.host + pathname;
 		const body = {
 			name: await this.getRunName(),
-			suite_id: suite_id,
+			suite_id: suiteID,
 			include_all: false,
-			case_ids: await this.getCasesIDsByType(project_id, type_id)
+			case_ids: await this.getCasesIDsByType(projectID, typeID)
 		};
 		const options = {
 			method: 'POST',
@@ -768,6 +768,176 @@ module.exports = class TestRailAPIs {
 		return await data.status;
 	}
 
+	// Returns an existing section
+	async getSection (sectionID) {
+		const method = 'get_section/';
+		const pathname = path.join(`${method}`, `${sectionID}`);
+		const url = this.host + pathname;
+		const options = {
+			method: 'GET',
+			headers: this.headers
+		};
+
+		const data = await this.myFetch(url, options, 'Provided section ID is not valid');
+		return await data;
+	}
+	// Returns a list of sections for a project and test suite
+	// The ID of the test suite (optional if the project is operating in single suite mode, default is 1)
+	async getSections (projectID, suiteID = 1) {
+		const method = 'get_sections/';
+		const param = '&suite_id=';
+		const pathname = path.join(`${method}`, `${projectID}`, `${param}`);
+		const url = this.host + pathname + suiteID;
+		const options = {
+			method: 'GET',
+			headers: this.headers
+		};
+
+		const data = await this.myFetch(url, options, 'Provided data is not valid');
+		return await data;
+	}
+	// Creates a new section
+	// The ID of the test suite is optional (default is 1) if the project is operating in single suite mode, required otherwise)
+	async addSection (projectID, name, suiteID = 1, description) {
+		const method = 'add_section/';
+		const pathname = path.join(`${method}`, `${projectID}`);
+		const url = this.host + pathname;
+		const body = {
+			name: name,
+			suite_id: suiteID,
+			description: description
+		};
+		const options = {
+			method: 'POST',
+			headers: this.headers,
+			body: JSON.stringify(body)
+		};
+
+		const data = await this.myFetch(url, options, 'Provided data is not valid');
+		return await data;
+	}
+	// Updates an existing section (partial updates are supported, i.e. you can submit and update specific fields only)
+	async updateSection (sectionID, name, description) {
+		const method = 'update_section/';
+		const pathname = path.join(`${method}`, `${sectionID}`);
+		const url = this.host + pathname;
+		const body = {
+			name: name,
+			description: description
+		};
+		const options = {
+			method: 'POST',
+			headers: this.headers,
+			body: JSON.stringify(body)
+		};
+
+		const data = await this.myFetch(url, options, 'Provided data is not valid');
+		return await data;
+	}
+	// Deletes an existing section
+	async deleteSection (sectionID) {
+		const method = 'delete_section/';
+		const pathname = path.join(`${method}`, `${sectionID}`);
+		const url = this.host + pathname;
+		const options = {
+			method: 'POST',
+			headers: this.headers
+		};
+
+		const data = await fetch(url, options);
+		await this.handleErrors(data, 'Provided section ID is not valid');
+		return await data.status;
+	}
+
+	// Returns a list of available test statuses
+	async getStatuses () {
+		const method = 'get_statuses/';
+		const url = this.host + method;
+		const options = {
+			method: 'GET',
+			headers: this.headers
+		};
+
+		const data = await this.myFetch(url, options, 'Provided project ID is not valid');
+		return await data;
+	}
+
+	// Returns an existing test suite
+	async getSuite (suiteID) {
+		const method = 'get_suite/';
+		const pathname = path.join(`${method}`, `${suiteID}`);
+		const url = this.host + pathname;
+		const options = {
+			method: 'GET',
+			headers: this.headers
+		};
+
+		const data = await this.myFetch(url, options, 'Provided suite ID is not valid');
+		return await data;
+	}
+	// Returns a list of test suites for a project
+	async getSuites (projectID) {
+		const method = 'get_suites/';
+		const pathname = path.join(`${method}`, `${projectID}`);
+		const url = this.host + pathname;
+		const options = {
+			method: 'GET',
+			headers: this.headers
+		};
+
+		const data = await this.myFetch(url, options, 'Provided project ID is not valid');
+		return await data;
+	}
+	// Creates a new test suite
+	async addSuite (projectID, name, description) {
+		const method = 'add_suite/';
+		const pathname = path.join(`${method}`, `${projectID}`);
+		const url = this.host + pathname;
+		const body = {
+			name: name,
+			description: description
+		};
+		const options = {
+			method: 'POST',
+			headers: this.headers,
+			body: JSON.stringify(body)
+		};
+
+		const data = await this.myFetch(url, options, 'Provided project ID is not valid');
+		return await data;
+	}
+	// Updates an existing test suite
+	async updateSuite (suiteID, name, description) {
+		const method = 'update_suite/';
+		const pathname = path.join(`${method}`, `${suiteID}`);
+		const url = this.host + pathname;
+		const body = {
+			name: name,
+			description: description
+		};
+		const options = {
+			method: 'POST',
+			headers: this.headers,
+			body: JSON.stringify(body)
+		};
+
+		const data = await this.myFetch(url, options, 'Provided suite ID is not valid');
+		return await data;
+	}
+	// Deletes an existing test suite
+	async deleteSuite (suiteID) {
+		const method = 'delete_suite/';
+		const pathname = path.join(`${method}`, `${suiteID}`);
+		const url = this.host + pathname;
+		const options = {
+			method: 'POST',
+			headers: this.headers
+		};
+
+		const data = await fetch(url, options);
+		await this.handleErrors(data, 'Provided suite ID is not valid');
+		return await data.status;
+	}
 
 	// Returns a list of available templates (requires TestRail 5.2 or later)
 	async getTemplates (projectId) {
@@ -779,24 +949,52 @@ module.exports = class TestRailAPIs {
 			headers: this.headers
 		};
 
-		const data = await this.myFetch(url, options, 'Provided project id is not valid');
+		const data = await this.myFetch(url, options, 'Provided project ID is not valid');
 		return await data;
 	}
 
-	// Return all tests for a test run
-	async getTests (runId) {
-		const method = 'get_tests/';
-		const pathname = path.join(`${method}`, `${runId}`);
+	// Returns an existing test
+	async getTest (testID) {
+		const method = 'get_test/';
+		const pathname = path.join(`${method}`, `${testID}`);
 		const url = this.host + pathname;
 		const options = {
 			method: 'GET',
 			headers: this.headers
 		};
 
-		const data = await this.myFetch(url, options, 'Provided run number is not valid');
+		const data = await this.myFetch(url, options, 'Provided test ID is not valid');
+		return await data;
+	}
+	// Return all tests for a test run
+	// Optional: Also a comma-separated list of status IDs to filter by
+	async getTests (runID, typeID = [1,2,3,4,5]) {
+		const method = 'get_tests/';
+		const param = '&status_id=';
+		const pathname = path.join(`${method}`, `${runID}`, `${param}`);
+		const url = this.host + pathname + typeID;
+		const options = {
+			method: 'GET',
+			headers: this.headers
+		};
+
+		const data = await this.myFetch(url, options, 'Provided data is not valid');
 		return await data;
 	}
 
+	// Returns an existing user
+	async getUser (userID) {
+		const method = 'get_user/';
+		const pathname = path.join(`${method}`, `${userID}`);
+		const url = this.host + pathname;
+		const options = {
+			method: 'GET',
+			headers: this.headers
+		};
+
+		const data = await this.myFetch(url, options, 'Provided user ID is not valid');
+		return await data;
+	}
 	// Returns a list of users
 	async getUsers () {
 		const method = 'get_users/';
@@ -807,6 +1005,18 @@ module.exports = class TestRailAPIs {
 		};
 
 		const data = await this.myFetch(url, options);
+		return await data;
+	}
+	// Returns an existing user by his/her email address
+	async getUserByEmail (email) {
+		const method = 'get_user_by_email&email=';
+		const url = this.host + method + email;
+		const options = {
+			method: 'GET',
+			headers: this.headers
+		};
+
+		const data = await this.myFetch(url, options, 'Provided email is not valid');
 		return await data;
 	}
 };
