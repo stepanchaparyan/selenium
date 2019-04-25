@@ -7,8 +7,7 @@ import LoginPage from '../src/loginSection/loginSectionPage';
 import chromeOptions from '../settings/chromeOptions';
 import args from 'minimist';
 import * as testRailCreds from '../settings/testRailSettings';
-//import TestRailAPI from 'api-testrail';
-import TestRailAPI from '../src/helpers/index';
+import TestRailAPI from 'api-testrail';
 
 let driver, loginPage, botSection, utils;
 let testRailApi, runID, caseID;
@@ -43,13 +42,13 @@ describe('Bot section', () => {
 		}
 	});
 
-	context.only('Test Rail APi testing', () => {
+	context('Test Rail APi testing', () => {
 		it('Simple tests', async () => {
 			//console.log(await testRailApi.deleteSection(14));
 			console.log(await testRailApi.getUser(1));
 		});
 	});
-	context.skip('Open Dashboard page', () => {
+	context.only('Open Dashboard page', () => {
 		it('C32  284 - Check the Dashboard page opens after Login', async function () {
 			// get test ID
 			caseID = this.test.title.substr(1,3).trim();
@@ -61,7 +60,7 @@ describe('Bot section', () => {
 			await utils.addResultForCase(testRailApi, runID, caseID);
 		});
 	});
-	context.skip('Open Dashboard page', () => {
+	context.only('Open Dashboard page', () => {
 		it('C34 284 - Check the Dashboard page opens after Login', async function () {
 			// get test ID
 			caseID = this.test.title.substr(1,3).trim();
